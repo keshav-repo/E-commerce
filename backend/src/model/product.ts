@@ -1,0 +1,7 @@
+export interface Product {
+  productId: string;
+  name: string;
+  description: string;
+  price: Number;
+  category: string;
+}

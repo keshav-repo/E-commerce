@@ -3,3 +3,4 @@ dist
 backend/package-lock.json
 .env
 log
+misc
