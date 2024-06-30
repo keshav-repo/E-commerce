@@ -1,4 +1,6 @@
 import { Client } from "pg";
+import L from "../helper/logger";
+
 import {
   POSTGRES_DB_HOST,
   POSTGRES_DB_NAME,
@@ -18,9 +20,9 @@ const client: Client = new Client({
 const connectDB = async function () {
   try {
     await client.connect();
-    console.log("client connected");
+    L.info("client connected");
   } catch (err) {
-    console.log("error connecting to db");
+    L.error("error connecting to db");
     process.exit(1);
   }
 };
