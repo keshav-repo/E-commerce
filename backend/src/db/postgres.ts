@@ -1,12 +1,18 @@
 import { Client } from "pg";
+import {
+  POSTGRES_DB_HOST,
+  POSTGRES_DB_NAME,
+  POSTGRES_DB_PASSWORD,
+  POSTGRES_DB_PORT,
+  POSTGRES_DB_USER,
+} from "../config";
 
-// Create a new instance of the Client with type annotations
 const client: Client = new Client({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: POSTGRES_DB_HOST,
+  port: POSTGRES_DB_PORT,
+  user: POSTGRES_DB_USER,
+  password: POSTGRES_DB_PASSWORD,
+  database: POSTGRES_DB_NAME,
 });
 
 const connectDB = async function () {
