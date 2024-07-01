@@ -1,11 +1,11 @@
 import express, { Express } from "express";
-import { connectDB } from "./db/postgres";
 import routes from "./routes";
+import db from "./db";
 
-connectDB();
+db.connect();
+
 const app: Express = express();
 app.use(express.json());
-
 
 routes(app);
 

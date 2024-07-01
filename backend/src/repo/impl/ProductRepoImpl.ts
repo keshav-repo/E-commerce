@@ -1,12 +1,13 @@
-import { Client } from "pg";
 import { ProductRepo } from "../ProductRepo";
 import L from "../../helper/logger";
 import { ProductEntity } from "../../entity/ProductEntity";
+import db from "../../db";
 
 class ProductRepoImpl implements ProductRepo {
-    private client: Client;
-    constructor(client: Client) {
-        this.client = client;
+
+    constructor() {
+        this.save = this.save.bind(this);
+        this.findByProductId = this.findByProductId.bind(this);
     }
 
     async findByProductId(productId: Number): Promise<ProductEntity | null> {
@@ -14,7 +15,7 @@ class ProductRepoImpl implements ProductRepo {
         const values = [productId];
 
         try {
-            const res = await this.client.query(query, values);
+            const res = await db.execute(query, values);
             if (res.rows.length > 0) {
                 const row = res.rows[0];
                 return {
@@ -45,7 +46,7 @@ class ProductRepoImpl implements ProductRepo {
             product.category,
         ];
         try {
-            const res = await this.client.query(query, values);
+            const res = await db.execute(query, values);
             const savedProduct = res.rows[0];
             return {
                 productId: savedProduct.product_id,
