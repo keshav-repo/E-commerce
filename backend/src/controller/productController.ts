@@ -11,24 +11,23 @@ class ProductController {
     this.saveProduct = this.saveProduct.bind(this);
   }
   public async fetchProduct(req: Request, res: Response): Promise<void> {
-    const products: Product[] = [
-      {
-        productId: "1",
-        name: "Laptop",
-        description: "A high-performance laptop for all your computing needs.",
-        price: 999.99,
-        category: "Electronics",
-      },
-      {
-        productId: "2",
-        name: "Smartphone",
-        description:
-          "A sleek smartphone with the latest features and a powerful camera.",
-        price: 799.99,
-        category: "Electronics",
-      },
-    ];
-    res.json(products);
+    const productId: string = req.query.productId as string;
+
+    if (!productId) {
+      res.status(400).json({ message: 'Product ID is required' });
+      return;
+    }
+
+    try {
+      const product = await this.productService.fetchProductById(parseInt(productId));
+      if (product) {
+        res.json(product);
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Some temporary error' });
+    }
   }
 
   public async saveProduct(req: Request, res: Response): Promise<void> {

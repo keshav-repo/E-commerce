@@ -11,20 +11,21 @@ class ProductRepoImpl implements ProductRepo {
     }
 
     async findByProductId(productId: Number): Promise<ProductEntity | null> {
-        const query = "SELECT * FROM products WHERE product_id = $1";
+        const query = "SELECT * FROM product WHERE product_id = $1";
         const values = [productId];
 
         try {
             const res = await db.execute(query, values);
             if (res.rows.length > 0) {
                 const row = res.rows[0];
-                return {
+                const productEntity: ProductEntity = {
                     productId: row.product_id,
                     name: row.name,
                     description: row.description,
                     price: row.price,
                     category: row.category,
-                };
+                }
+                return productEntity;
             } else {
                 return null;
             }
