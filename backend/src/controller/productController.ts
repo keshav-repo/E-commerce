@@ -1,8 +1,15 @@
 import { Request, Response } from "express";
 import { Product } from "../model/product";
+import { ProductService } from "../service/ProductService";
+import L from "../helper/logger";
 
 class ProductController {
-  constructor() {}
+  private productService: ProductService;
+  constructor(productService: ProductService) {
+    this.productService = productService;
+    this.fetchProduct = this.fetchProduct.bind(this);
+    this.saveProduct = this.saveProduct.bind(this);
+  }
   public async fetchProduct(req: Request, res: Response): Promise<void> {
     const products: Product[] = [
       {
@@ -23,5 +30,18 @@ class ProductController {
     ];
     res.json(products);
   }
+
+  public async saveProduct(req: Request, res: Response): Promise<void> {
+    const product: Product = req.body;
+    try {
+      const savedProduct = await this.productService.saveProduct(product);
+      res.status(201).json(savedProduct);
+    } catch (error) {
+      L.error(error);
+      res.status(500).json({ message: 'Internal error' });
+    }
+
+  }
+
 }
 export default ProductController;

@@ -4,8 +4,9 @@ import routes from "./routes";
 
 connectDB();
 const app: Express = express();
-routes(app);
-
 app.use(express.json());
+
+
+routes(app);
 
 export default app;
