@@ -7,6 +7,7 @@ import { ResponseTypes } from "../config/ResponseTypes";
 import { NotFoundError } from "../error/NotFoundError";
 import { InternalServerError } from "../error/InternalServerError";
 import { SuccessResponse } from "../response/SuccessResponse";
+import { productSchema } from "../validation/productValidation";
 
 class ProductController {
   private productService: ProductService;
@@ -35,6 +36,12 @@ class ProductController {
   }
 
   public async saveProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { error } = productSchema.validate(req.body);
+    if (error) {
+      L.error(error);
+      return next(new BadRequestError(error.message, ResponseTypes.PRODUCT_ID_REQUIRED_FOUND.code));
+    }
+
     const product: Product = req.body;
     try {
       const savedProduct = await this.productService.saveProduct(product);
