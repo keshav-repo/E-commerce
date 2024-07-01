@@ -8,6 +8,9 @@ const toProduct = (entity: ProductEntity): Product => {
         description: entity.description,
         price: entity.price,
         category: entity.category,
+        company: entity.company,
+        additionalInfo: entity.additionalInfo,
+        images: entity.images
     };
 };
 
@@ -18,6 +21,9 @@ const toProductEntity = (product: Product): ProductEntity => {
         description: product.description,
         price: product.price,
         category: product.category,
+        company: product.company,
+        additionalInfo: product.additionalInfo,
+        images: product.images
     };
 };
 

@@ -24,6 +24,11 @@ class ProductRepoImpl implements ProductRepo {
                     description: row.description,
                     price: row.price,
                     category: row.category,
+                    company: row.company,
+                    additionalInfo: row.additional_info ? row.additional_info : undefined,
+                    createdAt: row.created_at,
+                    updatedAt: row.updated_at,
+                    images: row.images ? row.images : undefined,
                 }
                 return productEntity;
             } else {
@@ -36,15 +41,18 @@ class ProductRepoImpl implements ProductRepo {
     }
     async save(product: ProductEntity): Promise<ProductEntity> {
         const query = `
-                INSERT INTO product (name, description, price, category)
-                VALUES ($1, $2, $3, $4)
-                 RETURNING product_id, name, description, price, category
-            `;
+            INSERT INTO product (name, description, price, category, company, additional_info, images)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING product_id, name, description, price, category, company, additional_info, created_at, updated_at, images
+        `;
         const values = [
             product.name,
             product.description,
             product.price,
             product.category,
+            product.company,
+            product.additionalInfo ? JSON.stringify(product.additionalInfo) : null,
+            product.images ? JSON.stringify(product.images) : null,
         ];
         try {
             const res = await db.execute(query, values);
@@ -55,10 +63,15 @@ class ProductRepoImpl implements ProductRepo {
                 description: savedProduct.description,
                 price: savedProduct.price,
                 category: savedProduct.category,
+                company: savedProduct.company,
+                additionalInfo: savedProduct.additional_info ? savedProduct.additional_info : undefined,
+                createdAt: savedProduct.created_at,
+                updatedAt: savedProduct.updated_at,
+                images: savedProduct.images ? savedProduct.images : undefined,
             };
         } catch (error) {
             L.error(error);
-            throw new Error(`Unable to save product`);
+            throw new Error(`Unable to save product in db`);
         }
     }
 }

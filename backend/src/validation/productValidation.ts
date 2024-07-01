@@ -10,7 +10,7 @@ export const productSchema = Joi.object({
         'string.max': 'Name should have at most 100 characters',
         'any.required': 'Name is required',
     }),
-    description: Joi.string().min(10).max(500).required().messages({
+    description: Joi.string().optional().max(500).required().messages({
         'string.base': 'Description must be a string',
         'string.min': 'Description should have at least 10 characters',
         'string.max': 'Description should have at most 500 characters',
@@ -26,4 +26,9 @@ export const productSchema = Joi.object({
         'any.only': 'Category must be one of the following: Electronics, Clothing, Home, Toys',
         'any.required': 'Category is required',
     }),
+    company: Joi.string().optional(),
+    additionalInfo: Joi.object({
+        specifications: Joi.object().pattern(Joi.string(), Joi.string()).optional()
+    }).optional(),
+    images: Joi.array().optional()
 });
