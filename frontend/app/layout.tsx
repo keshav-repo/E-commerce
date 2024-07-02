@@ -9,9 +9,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Header />
-      {/* <body className={`${inter.className} antialiased`}>{children}</body> */}
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
