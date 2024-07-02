@@ -41,3 +41,6 @@ gitBkp
 
 script
 
+
+public/customers/**.png
+public/**.png
