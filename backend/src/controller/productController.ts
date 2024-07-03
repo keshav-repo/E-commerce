@@ -8,6 +8,7 @@ import { NotFoundError } from "../error/NotFoundError";
 import { InternalServerError } from "../error/InternalServerError";
 import { SuccessResponse } from "../response/SuccessResponse";
 import { productSchema } from "../validation/productValidation";
+import { DeliveryResponse } from "../response/DeliveryResponse";
 
 class ProductController {
   private productService: ProductService;
@@ -15,6 +16,7 @@ class ProductController {
     this.productService = productService;
     this.fetchProduct = this.fetchProduct.bind(this);
     this.saveProduct = this.saveProduct.bind(this);
+    this.checkDelivery = this.checkDelivery.bind(this);
   }
   public async fetchProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
     const productId: string = req.query.productId as string;
@@ -51,5 +53,16 @@ class ProductController {
       return next(new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code));
     }
   }
+
+  public async checkDelivery(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const deliveryRes: DeliveryResponse = {
+      available: true,
+      deliveryCharges: 50,
+      estimatedDeliveryTime: 3,
+      notes: "Delivery might be delayed due to weather conditions"
+    }
+    res.json(deliveryRes);
+  }
+
 }
 export default ProductController;
