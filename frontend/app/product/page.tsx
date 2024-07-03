@@ -14,7 +14,7 @@ export default async function Page({
 }: {
   params: { productId: string };
 }) {
-  const productData = await fetchProduct('3');
+  const productData = await fetchProduct('6');
   const product = productData.data;
 
   return (
