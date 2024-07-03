@@ -17,7 +17,7 @@ export default async function Page({
   const product = productData.data;
 
   return (
-    <main className="p-6">
+    <main className="pt-16">
       <Suspense>
         <ProductDetails product={product} />
       </Suspense>
