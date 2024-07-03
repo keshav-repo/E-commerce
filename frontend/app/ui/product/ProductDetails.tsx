@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Product } from '@/app/lib/definitions';
-import SimilarProducts from './product/SimilarProducts';
+import SimilarProducts from './SimilarProducts';
 
 export default function ProductDetails({ product }: { product: Product }) {
   return (

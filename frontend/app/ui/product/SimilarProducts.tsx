@@ -28,7 +28,6 @@ const similarProducts: SimilarProduct[] = [
     image:
       'https://ecomstore-dev-data.s3.us-east-2.amazonaws.com/product/img3_product_2.jpg',
   },
-  // Add more products here...
 ];
 
 export default function SimilarProducts() {

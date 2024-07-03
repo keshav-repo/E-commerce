@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import ProductDetails from '@/app/ui/product-details';
+import ProductDetails from '@/app/ui/product/ProductDetails';
 import { fetchProduct } from '@/app/lib/fetchProduct';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
