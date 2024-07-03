@@ -12,3 +12,11 @@ export type Product = {
   };
   images: string[];
 }
+
+
+export type DeliveryResponse = {
+  available: boolean;
+  estimatedDeliveryTime: number;
+  deliveryCharges: number;
+  notes: string;
+}

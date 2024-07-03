@@ -30,7 +30,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           <ProductInfo product={product} />
           <SizeSelection />
           <AddToCartButtons />
-          <DeliveryOptions />
+          <DeliveryOptions productId={product.productId} />
           <BestOffers />
           <ProductDetailsSection details={productDetails} />
         </div>
