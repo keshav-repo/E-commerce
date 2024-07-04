@@ -8,6 +8,7 @@ import {
 } from 'react-icons/ai';
 import Search from '../search';
 import SearchInput from './search';
+import Profile from './profile';
 
 const Header = () => {
   return (
@@ -60,13 +61,7 @@ const Header = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Link
-              href="#"
-              className="flex flex-col items-center text-gray-700 hover:text-gray-900"
-            >
-              <FaUser className="text-2xl" />
-              <span className="text-sm">Profile</span>
-            </Link>
+            <Profile />
             <Link
               href="#"
               className="flex flex-col items-center text-gray-700 hover:text-gray-900"
