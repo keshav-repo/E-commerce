@@ -5,11 +5,13 @@ export const ResponseTypes = {
     NOT_FOUND: { code: "ERR03", message: "Resource not found" },
     PRODUCT_ID_REQUIRED_FOUND: { code: "ERR04", message: "Product Id required" },
     PRODUCT_NOT_FOUND: { code: "ERR05", message: "Product not found" },
+    EMPTY_PRODUCT_QUERY: { code: "ERR06", message: "query, page, size can't be empty" },
 
 
     // Success Types
     PRODUCT_CREATED: { code: "SUC01", message: "Product created" },
     PRODUCT_FETCHED: { code: "SUC02", message: "Product fetched successfully" },
+    SEARCH_SUCCESS: { code: "SUC03", message: "Search product successfully" },
 
 } as const;
 

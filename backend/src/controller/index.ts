@@ -1,6 +1,8 @@
 import ProductController from "./productController";
-import { productService } from "../service";
+import { productService, searchService } from "../service";
+import SearchController from "./searchController";
 
-const productController: ProductController = new ProductController(productService);
+const productController: ProductController = new ProductController(productService),
+    searchController: SearchController = new SearchController(searchService);
 
-export { productController };
+export { productController, searchController };

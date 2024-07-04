@@ -15,9 +15,10 @@
     "@types/node": "^20.14.9",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.14.0",
     "@types/pg": "^8.11.6",
     "@types/winston": "^2.4.4",
     "dotenv": "^16.4.5",
