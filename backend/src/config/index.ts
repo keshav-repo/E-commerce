@@ -12,3 +12,5 @@ export const POSTGRES_DB_NAME = process.env.DB_NAME;
 export const ES_HOST = process.env.ES_HOST || '';
 export const ES_USERNAME = process.env.ES_USERNAME || '';
 export const ES_PASSWORD = process.env.ES_PASSWORD || '';
+
+export const USER_AUTH_KEYS = process.env.USER_AUTH_KEYS || '';
