@@ -2,14 +2,13 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const LoginModule: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const router: AppRouterInstance = useRouter();
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,23 +16,32 @@ const LoginModule: React.FC = () => {
       const response = await fetch('/api/user/login', {
         method: 'POST',
         headers: {
-          'Content-type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: username,
-          password: password,
+          username,
+          password,
         }),
       });
+
       if (response.ok) {
         setMessage('');
         router.push('/home');
       } else {
         const data = await response.json();
-        setMessage(data.message || 'something went wrong');
+        setMessage(data.message || 'Something went wrong');
       }
     } catch (err) {
-      setMessage('Login failed, Please check your credential');
+      setMessage('Login failed, please check your credentials');
     }
+  };
+
+  const handleSignupRedirect = async () => {
+    router.push('/signup'); // Change '/signup' to the correct path of your signup page
+  };
+
+  const handleGoogleLogin = async (e: any) => {
+    window.location.href = 'http://localhost:8080/api/auth/google';
   };
 
   return (
@@ -49,6 +57,7 @@ const LoginModule: React.FC = () => {
               className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:border-red-500 focus:outline-none"
               placeholder="Username"
               id="username"
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
             />
@@ -65,6 +74,7 @@ const LoginModule: React.FC = () => {
               className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:border-red-500 focus:outline-none"
               placeholder="Password"
               id="password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -84,11 +94,11 @@ const LoginModule: React.FC = () => {
             </button>
           </div>
           {message && (
-            <p className="mt-2 rounded border border-red-400 bg-red-100 p-3 text-center text-sm font-semibold  text-red-700">
+            <p className="mt-4 rounded border border-red-400 bg-red-100 p-3 text-center text-sm font-semibold text-red-700">
               {message}
             </p>
           )}
-          <p className="mt-4 text-center text-gray-600 ">
+          <p className="mt-4 text-center text-gray-600">
             By continuing, I agree to the{' '}
             <a href="#" className="text-red-500">
               Terms of Use
@@ -101,10 +111,19 @@ const LoginModule: React.FC = () => {
         </form>
         <div className="flex justify-center">
           <button
+            onClick={handleSignupRedirect}
             className="mx-auto mt-4 w-1/2 rounded bg-blue-400 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-            onClick={(e) => router.push('/signup')}
           >
             Signup
+          </button>
+        </div>
+
+        <div className="flex justify-center">
+          <button
+            onClick={handleGoogleLogin}
+            className="mx-auto mt-4 w-1/2 rounded bg-blue-400 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            Google Login
           </button>
         </div>
       </div>

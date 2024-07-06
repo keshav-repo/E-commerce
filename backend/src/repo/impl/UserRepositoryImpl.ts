@@ -32,11 +32,17 @@ class UserRepositoryImpl implements UserRepository {
 
     async save(user: User): Promise<void> {
         const query = `
-            INSERT INTO users ( username, password)
-            VALUES ( $1, $2)
-            RETURNING username, password
+            INSERT INTO users (username, password, email, name, profilePhoto)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING username, password, email, name, profilePhoto
         `;
-        const params = [user.username, user.password];
+        const params = [
+            user.username,
+            user.password,
+            user.email || null, // Ensure optional fields are handled
+            user.name || null,
+            user.profilePhoto || null
+        ];
         try {
             await await db.execute(query, params);
             L.info("User saved successfully");

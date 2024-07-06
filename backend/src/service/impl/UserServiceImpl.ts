@@ -45,7 +45,7 @@ class UserServiceImpl implements UserService {
                 throw new NotFoundError(ResponseTypes.USER_NOT_FOUND.message, ResponseTypes.USER_NOT_FOUND.code);
             }
 
-            const match = await compareHash(password, user.password);
+            const match = await compareHash(password, user.password!);
             if (match) {
                 const payload: customJwtPayload = {
                     username: user.username,

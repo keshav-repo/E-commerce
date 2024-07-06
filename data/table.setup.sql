@@ -19,6 +19,10 @@ CREATE TABLE product (
 
 CREATE TABLE users (
     userId SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(100),
+    -- Make this nullable to accommodate OAuth users
+    email VARCHAR(100) UNIQUE,
+    name VARCHAR(100),
+    profilePhoto TEXT -- Use TEXT for potentially long URLs or base64 encoded images
 );
