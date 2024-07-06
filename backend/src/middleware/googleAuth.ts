@@ -17,7 +17,7 @@ passport.use(
             callbackURL: '/api/auth/callback/google',
             passReqToCallback: true,
         },
-        (req: Request, accessToken: string, refreshToken: string, profile: Profile, done: (error: any, user?: any) => void) => {
+        async (req: Request, accessToken: string, refreshToken: string, profile: Profile, done: (error: any, user?: any) => void) => {
 
             const user: User = {
                 username: profile.emails ? profile.emails[0].value : profile.id,
@@ -27,9 +27,9 @@ passport.use(
             }
 
             try {
-                userService.save(user);
+                await userService.save(user);
             } catch (err) {
-                if (err! instanceof BadRequestError) {
+                if (!(err instanceof BadRequestError)) {
                     return done(new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code));
                 }
             }
