@@ -2,9 +2,11 @@
 import Link from 'next/link';
 import { FaUser } from 'react-icons/fa';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Profile() {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const router = useRouter();
 
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
@@ -22,7 +24,10 @@ export default function Profile() {
       {isPopupVisible && (
         <div className="absolute right-0 z-10 mt-2 w-64 border border-gray-300 bg-white shadow-lg">
           <div className="p-4">
-            <button className="mt-2 w-full rounded bg-red-500 py-2 text-white hover:bg-red-600">
+            <button
+              className="mt-2 w-full rounded bg-red-500 py-2 text-white hover:bg-red-600"
+              onClick={(e) => router.push('/login')}
+            >
               LOGIN / SIGNUP
             </button>
             <ul className="mt-4 text-gray-700">
