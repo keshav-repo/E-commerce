@@ -28,6 +28,7 @@ googleAuthRouter.get('/api/auth/callback/google', passport.authenticate('google'
 
     res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
     res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.cookie('username', user.username, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
 
     res.redirect('http://localhost:3000/home');
 });

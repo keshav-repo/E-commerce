@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FcGoogle } from 'react-icons/fc';
 
 const LoginModule: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -118,12 +119,14 @@ const LoginModule: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center pt-4">
           <button
             onClick={handleGoogleLogin}
-            className="mx-auto mt-4 w-1/2 rounded bg-blue-400 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            className="mx-auto flex w-1/2 max-w-xs items-center justify-center rounded border border-gray-400 bg-transparent p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            aria-label="Login with Google"
           >
-            Google Login
+            <FcGoogle className="mr-2" />
+            <span className="font-semibold">Google Login</span>
           </button>
         </div>
       </div>

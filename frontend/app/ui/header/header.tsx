@@ -6,7 +6,6 @@ import {
   AiOutlineShoppingCart,
   AiOutlineSearch,
 } from 'react-icons/ai';
-import Search from '../search';
 import SearchInput from './search';
 import Profile from './profile';
 
