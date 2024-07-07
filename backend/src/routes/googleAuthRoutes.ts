@@ -42,5 +42,4 @@ googleAuthRouter.get('/api/auth/login-failure', (req: Request, res: Response) =>
     res.status(401).send('Login failed. Unauthorized');
 });
 
-
 export default googleAuthRouter;

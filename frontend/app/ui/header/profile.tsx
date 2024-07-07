@@ -1,6 +1,5 @@
-// app/ui/header/profile.tsx
-
 'use client';
+
 import Link from 'next/link';
 import { FaUser } from 'react-icons/fa';
 import { useState } from 'react';
@@ -33,7 +32,11 @@ export default function Profile() {
                 <p className="mb-4">Hello, {user}</p>
                 <button
                   className="mt-2 w-full rounded bg-red-500 py-2 text-white hover:bg-red-600"
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    setIsPopupVisible(false);
+                    router.push('/');
+                  }}
                 >
                   LOGOUT
                 </button>

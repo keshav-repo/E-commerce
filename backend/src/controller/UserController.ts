@@ -40,6 +40,15 @@ class UserController {
         }
     };
 
+    public logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        res.clearCookie('token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.clearCookie('refreshToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.clearCookie('username', { httpOnly: false, secure: process.env.NODE_ENV === 'production' });
+        res.clearCookie('displayname', { httpOnly: false, secure: process.env.NODE_ENV === 'production' });
+
+        res.status(200).json(new SuccessResponse(ResponseTypes.LOGOUT_SUCCESS));
+    }
+
 }
 
 export default UserController;

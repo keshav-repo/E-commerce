@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
+import axios from 'axios';
 
 interface AuthContextType {
   user: string | null;
@@ -17,8 +18,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(username);
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    try {
+      await axios.post('/api/user/logout');
+      setUser(null);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (

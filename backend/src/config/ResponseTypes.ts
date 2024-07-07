@@ -17,6 +17,7 @@ export const ResponseTypes = {
     SEARCH_SUCCESS: { code: "SUC03", message: "Search product successfully" },
     USER_CREATED: { code: "SUC04", message: "user created" },
     TOKEN_CREATED: { code: "SUC05", message: "Token created" },
+    LOGOUT_SUCCESS: { code: "SUC06", message: "Logged out successfully" }
 
 } as const;
 
