@@ -19,10 +19,10 @@ googleAuthRouter.get('/api/auth/callback/google', passport.authenticate('google'
         username: user.username
     }
 
-    const token = generateToken(payload, USER_AUTH_KEYS, '1h');
+    const token = generateToken(payload, USER_AUTH_KEYS!, '1h');
     const refreshToken = generateRefreshToken(
         payload,
-        USER_AUTH_KEYS,
+        USER_AUTH_KEYS!,
         "7d"
     );
 

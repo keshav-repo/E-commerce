@@ -21,10 +21,10 @@ class UserController {
         try {
             const tokenRes: TokenResponse = await this.userService.findByUsername(username, password);
 
-            res.cookie('token', tokenRes.token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
-            res.cookie('refreshToken', tokenRes.refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
-            res.cookie('username', username, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
-            res.cookie('displayname', username, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
+            res.cookie('token', tokenRes.token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
+            res.cookie('refreshToken', tokenRes.refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
+            res.cookie('username', username, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
+            res.cookie('displayname', username, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
 
             res.json(new SuccessResponse(ResponseTypes.TOKEN_CREATED));
         } catch (err) {

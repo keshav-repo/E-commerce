@@ -19,6 +19,7 @@ export default function DeliveryOptions({ productId }: DeliveryOptionsProps) {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ productId, pincode }),
     });
 

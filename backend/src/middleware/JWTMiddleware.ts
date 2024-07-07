@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utility/jwtHelper";
+import { generateToken, verifyToken } from "../utility/jwtHelper";
 import { customJwtPayload } from "../model/customJwtPayload";
+import { USER_AUTH_KEYS } from "../config";
+import { TokenExpiredError } from "../error/TokenExpiredError";
 
 class JWTMiddleware {
-    private secretKey: string;
 
     constructor() {
-        // this.secretKey = process.env.SECRET_KEY as string | "some-key";
-        this.secretKey = "some-key";
     }
 
     public authenticateJWT = (
@@ -15,21 +14,37 @@ class JWTMiddleware {
         res: Response,
         next: NextFunction
     ): void => {
-        const authHeader = req.headers.authorization;
 
-        if (authHeader) {
-            const token = authHeader.split(" ")[1];
+        const token = req.cookies.token;
+        const refreshToken = req.cookies.refreshToken;
 
+        if (token) {
             try {
-                const payload: customJwtPayload = verifyToken(token, this.secretKey);
+                const payload: customJwtPayload = verifyToken(token, USER_AUTH_KEYS!);
                 (req as any).user = {
                     username: payload.username,
                 };
-
                 next();
-            } catch (err) {
-                res.sendStatus(403);
-                return;
+            } catch (error) {
+                if (error instanceof TokenExpiredError && refreshToken) {
+                    try {
+                        const refreshPayload: customJwtPayload = verifyToken(refreshToken, USER_AUTH_KEYS!);
+                        const newToken = generateToken({ username: refreshPayload.username }, USER_AUTH_KEYS!, "1h");
+
+                        res.cookie('token', newToken, {
+                            httpOnly: true,
+                            secure: process.env.NODE_ENV === 'production',
+                            sameSite: 'strict'
+                        });
+
+                        (req as any).user = { username: refreshPayload.username };
+                        next();
+                    } catch (refreshError) {
+                        res.sendStatus(403);
+                    }
+                } else {
+                    res.sendStatus(403);
+                }
             }
         } else {
             res.sendStatus(401);

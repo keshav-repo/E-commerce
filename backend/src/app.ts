@@ -5,12 +5,14 @@ import { errorHandler } from "./middleware/errorHandler";
 import { passport } from './middleware';
 import cors from 'cors';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
 db.connect();
 
 const app: Express = express();
 app.use(cors());
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use(session({

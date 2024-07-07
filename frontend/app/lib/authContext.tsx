@@ -1,7 +1,14 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 interface AuthContextType {
   user: string | null;
@@ -17,6 +24,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (username: string) => {
     setUser(username);
   };
+
+  useEffect(() => {
+    const displayname: string | undefined = Cookies.get('displayname');
+    if (displayname) {
+      login(displayname!);
+    }
+  }, []);
 
   const logout = async () => {
     try {

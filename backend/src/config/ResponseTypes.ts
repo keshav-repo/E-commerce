@@ -9,7 +9,8 @@ export const ResponseTypes = {
     USER_NOT_FOUND: { code: "ERR07", message: "user not found" },
     USER_EXIST: { code: "ERR08", message: "user already exist" },
     USER_WRONG_CRED: { code: "ERR09", message: "username or password is not matching" },
-
+    TOKEN_EXPIRED: { code: "ERR10", message: "Access token expired" },
+    TOKEN_INVALID: { code: "ERR11", message: "Invalid token" },
 
     // Success Types
     PRODUCT_CREATED: { code: "SUC01", message: "Product created" },
