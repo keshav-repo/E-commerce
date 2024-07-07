@@ -5,6 +5,8 @@ import { SuccessResponse } from "../response/SuccessResponse";
 import { TokenResponse } from "../response/TokenResponse";
 import { UserService } from "../service/UserService";
 import { getHash } from "../utility/encryption";
+import { TOKEN_AGE_IN_MS } from "../config";
+import { CONSTANTS } from "../config";
 
 class UserController {
     private userService: UserService;
@@ -21,10 +23,10 @@ class UserController {
         try {
             const tokenRes: TokenResponse = await this.userService.findByUsername(username, password);
 
-            res.cookie('token', tokenRes.token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
-            res.cookie('refreshToken', tokenRes.refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
-            res.cookie('username', username, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
-            res.cookie('displayname', username, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000, sameSite: true });
+            res.cookie(CONSTANTS.TOKEN, tokenRes.token, { httpOnly: true, secure: process.env.NODE_ENV === CONSTANTS.PRODUCTION_ENV, maxAge: TOKEN_AGE_IN_MS, sameSite: true });
+            res.cookie(CONSTANTS.REFRESH_TOKEN, tokenRes.refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === CONSTANTS.PRODUCTION_ENV, maxAge: TOKEN_AGE_IN_MS, sameSite: true });
+            res.cookie(CONSTANTS.USERNAME, username, { httpOnly: false, secure: process.env.NODE_ENV === CONSTANTS.PRODUCTION_ENV, maxAge: TOKEN_AGE_IN_MS, sameSite: true });
+            res.cookie(CONSTANTS.DISPLAY_NAME, username, { httpOnly: false, secure: process.env.NODE_ENV === CONSTANTS.PRODUCTION_ENV, maxAge: TOKEN_AGE_IN_MS, sameSite: true });
 
             res.json(new SuccessResponse(ResponseTypes.TOKEN_CREATED));
         } catch (err) {

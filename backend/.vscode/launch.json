@@ -1,18 +1,26 @@
 {
-    "version": "0.3.0",
-    "configurations": [
-      {
-        "type": "node",
-        "request": "launch",
-        "name": "Backend Server",
-        "skipFiles": [
-          "<node_internals>/**"
-        ],
-        "program": "${workspaceFolder}/src/server.ts",
-        "runtimeArgs": ["-r", "ts-node/register", "-r", "tsconfig-paths/register"],
-        "console": "integratedTerminal",
-        "preLaunchTask": "tsc: build - tsconfig.json",
-        "outFiles": ["${workspaceFolder}/**/*.js"]
-      }
-    ]
-  }
+  "version": "0.4.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Backend Server",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/server.ts",
+      "runtimeArgs": [
+        "-r", "ts-node/register",
+        "-r", "tsconfig-paths/register",
+        "-r", "dotenv/config"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "dotenv_config_path": ".env.development"
+      },
+      "console": "integratedTerminal",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import { TokenResponse } from "../../response/TokenResponse";
 import { compareHash } from "../../utility/encryption";
 import { generateRefreshToken, generateToken } from "../../utility/jwtHelper";
 import { UserService } from "../UserService";
+import { REFRESH_TOKEN_EXPIRY, ACCESS_TOKEN_EXPIRY } from "../../config";
 
 class UserServiceImpl implements UserService {
     private userRepo: UserRepository;
@@ -50,11 +51,11 @@ class UserServiceImpl implements UserService {
                 const payload: customJwtPayload = {
                     username: user.username,
                 };
-                const token = generateToken(payload, USER_AUTH_KEYS!, "1h");
+                const token = generateToken(payload, USER_AUTH_KEYS!, ACCESS_TOKEN_EXPIRY);
                 const refreshToken = generateRefreshToken(
                     payload,
                     USER_AUTH_KEYS!,
-                    "7d"
+                    REFRESH_TOKEN_EXPIRY
                 );
                 const tokenMessage: TokenResponse = { token, refreshToken }
                 return tokenMessage;

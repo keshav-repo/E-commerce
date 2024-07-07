@@ -1,2 +1,3 @@
 misc
 backend/package-lock.json
+backend/.env.development

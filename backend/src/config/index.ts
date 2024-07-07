@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { CONSTANTS } from './constants';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -17,3 +18,9 @@ export const USER_AUTH_KEYS = process.env.USER_AUTH_KEYS;
 
 export const GOOGLE_AUTH_CLIENTID = process.env.GOOGLE_AUTH_CLIENTID || '';
 export const GOOGLE_AUTH_SECRET = process.env.GOOGLE_AUTH_SECRET || '';
+
+export const TOKEN_AGE_IN_MS = process.env.TOKEN_AGE_IN_MS ? parseInt(process.env.TOKEN_AGE_IN_MS) : 3600000; // 1 hour default
+export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY || '7d';
+export const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY || '1h'
+
+export { CONSTANTS };

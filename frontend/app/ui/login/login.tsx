@@ -42,7 +42,12 @@ const LoginModule: React.FC = () => {
   };
 
   const handleGoogleLogin = async (e: any) => {
-    window.location.href = 'http://localhost:8080/api/auth/google';
+    const currentUrl = window.location.href;
+    window.location.href = `http://localhost:8080/api/auth/google?returnTo=${encodeURIComponent(
+      currentUrl,
+    )}`;
+
+    // window.location.href = 'http://localhost:8080/api/auth/google';
   };
 
   return (
