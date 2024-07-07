@@ -1,6 +1,6 @@
 import '@/app/ui/global.css';
-import { inter } from '@/app/ui/fonts';
 import Header from './ui/header/header';
+import { AuthProvider } from './lib/authContext';
 
 export default function RootLayout({
   children,
@@ -10,8 +10,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
