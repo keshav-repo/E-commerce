@@ -26,10 +26,10 @@ googleAuthRouter.get('/api/auth/callback/google', passport.authenticate('google'
         "7d"
     );
 
-    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-    res.cookie('username', user.username, { httpOnly: false, secure: process.env.NODE_ENV === 'production' });
-    res.cookie('displayname', user.name!, { httpOnly: false, secure: process.env.NODE_ENV === 'production' });
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
+    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
+    res.cookie('username', user.username, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
+    res.cookie('displayname', user.name!, { httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 1000 });
 
     res.redirect('http://localhost:3000/home');
 });
