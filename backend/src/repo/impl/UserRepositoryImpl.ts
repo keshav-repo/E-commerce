@@ -1,6 +1,6 @@
 import { UserRepository } from "../UserRepository";
 import { User } from "../../model/User";
-import db from "../../db";
+import { db } from "../../db";
 import L from "../../helper/logger";
 
 class UserRepositoryImpl implements UserRepository {

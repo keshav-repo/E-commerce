@@ -13,9 +13,33 @@ docker exec -it postgres-db /bin/bash
 psql -h localhost -p 5432 -U postgres -d postgres
 ```
 
-### Elastic search db setup
+### Elastic search db setup using docker
 
 ```shell
+export ELASTIC_PASSWORD="password@123"
+export KIBANA_PASSWORD="password@123"
+
+docker network create elastic-net
+
+docker run -p 127.0.0.1:9200:9200 -d --name elasticsearch --network elastic-net \
+  -e ELASTIC_PASSWORD=$ELASTIC_PASSWORD \
+  -e "discovery.type=single-node" \
+  -e "xpack.security.http.ssl.enabled=false" \
+  -e "xpack.license.self_generated.type=trial" \
+  docker.elastic.co/elasticsearch/elasticsearch:8.14.1
+
+```
+
+### Kafka setup with single node
+
+```shell
+docker-compose -f kafka.setup.yml up
+
+# enter into kafka 1 bash shell
+docker exec -it kafka1 /bin/bash
+
+# create order topic
+kafka-topics --create --topic product --partitions 1 --replication-factor 1 --if-not-exists --bootstrap-server localhost:9092
 
 
 ```

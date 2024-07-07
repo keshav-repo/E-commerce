@@ -1,5 +1,5 @@
 export interface ProductEntity {
-    productId?: string;
+    productId?: number;
     name: string;
     price: Number;
     category: string;

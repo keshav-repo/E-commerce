@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import routes from "./routes";
-import db from "./db";
+import { db, connectKafka } from "./db";
 import { errorHandler } from "./middleware/errorHandler";
 import { passport } from './middleware';
 import cors from 'cors';
@@ -8,6 +8,7 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 
 db.connect();
+connectKafka();
 
 const app: Express = express();
 app.use(cors());

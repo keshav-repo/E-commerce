@@ -5,6 +5,7 @@ import { ProductService } from "../ProductService";
 import convertionUtility from "../../utility/conversionUtils"
 import L from "../../helper/logger";
 import conversionUtils from "../../utility/conversionUtils";
+import { produceMessage } from "../../utility/kafkaUtility";
 
 class ProductServiceImpl implements ProductService {
     private productRepo: ProductRepo;
@@ -26,6 +27,10 @@ class ProductServiceImpl implements ProductService {
         try {
             let productEntity: ProductEntity = convertionUtility.toProductEntity(product);
             productEntity = await this.productRepo.save(productEntity);
+
+            // produce data to kafka 
+            produceMessage(productEntity, productEntity.productId ? productEntity.productId.toString() : 'something', 'product');
+
             const productRes: Product = convertionUtility.toProduct(productEntity);
             return productRes;
         } catch (error) {

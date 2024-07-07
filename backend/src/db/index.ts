@@ -1,5 +1,6 @@
 import { db } from "./db";
 import Postgres from "./postgres";
+import { producer, connectKafka } from "./kafka";
 
 const db: db = new Postgres();
-export default db;
+export { db, producer, connectKafka };

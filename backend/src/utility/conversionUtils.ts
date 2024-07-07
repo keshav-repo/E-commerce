@@ -3,7 +3,7 @@ import { Product } from "../model/product";
 
 const toProduct = (entity: ProductEntity): Product => {
     return {
-        productId: entity.productId ? entity.productId : "",
+        productId: entity.productId ? entity.productId.toString() : "",
         name: entity.name,
         description: entity.description,
         price: entity.price,
@@ -16,7 +16,7 @@ const toProduct = (entity: ProductEntity): Product => {
 
 const toProductEntity = (product: Product): ProductEntity => {
     return {
-        productId: product.productId,
+        productId: parseInt(product.productId),
         name: product.name,
         description: product.description,
         price: product.price,

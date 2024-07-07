@@ -1,7 +1,8 @@
 import { ProductRepo } from "../ProductRepo";
 import L from "../../helper/logger";
 import { ProductEntity } from "../../entity/ProductEntity";
-import db from "../../db";
+import { db } from "../../db";
+import { produceMessage } from "../../utility/kafkaUtility";
 
 class ProductRepoImpl implements ProductRepo {
 
