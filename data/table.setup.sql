@@ -2,7 +2,7 @@
 CREATE DATABASE ecommerce;
 
 -- connect to db
--- \ c ecommerce 
+-- \ c ecommerce
 -- create table for product
 CREATE TABLE product (
     product_id SERIAL PRIMARY KEY,

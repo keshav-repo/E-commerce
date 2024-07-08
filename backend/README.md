@@ -11,6 +11,9 @@ docker exec -it postgres-db /bin/bash
 
 #3 connect to db
 psql -h localhost -p 5432 -U postgres -d postgres
+
+# Crate db
+create database ecommerce;
 ```
 
 ### Elastic search db setup using docker
