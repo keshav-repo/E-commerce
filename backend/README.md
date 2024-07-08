@@ -21,7 +21,7 @@ export KIBANA_PASSWORD="password@123"
 
 docker network create elastic-net
 
-docker run -p 127.0.0.1:9200:9200 -d --name elasticsearch --network elastic-net \
+docker run -p 127.0.0.1:9800:9200 -d --name elasticsearch --network elastic-net \
   -e ELASTIC_PASSWORD=$ELASTIC_PASSWORD \
   -e "discovery.type=single-node" \
   -e "xpack.security.http.ssl.enabled=false" \
