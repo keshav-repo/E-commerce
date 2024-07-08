@@ -39,7 +39,11 @@ docker-compose -f kafka.setup.yml up
 docker exec -it kafka1 /bin/bash
 
 # create order topic
-kafka-topics --create --topic product --partitions 1 --replication-factor 1 --if-not-exists --bootstrap-server localhost:9092
+kafka-topics --create --topic product --partitions 2 --replication-factor 2 --if-not-exists --bootstrap-server localhost:9092
+
+# consume product topic
+kafka-console-consumer --topic product --from-beginning --bootstrap-server localhost:29092
+
 
 
 ```
