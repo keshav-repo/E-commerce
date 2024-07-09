@@ -1,15 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import { FaUser } from 'react-icons/fa';
-import {
-  AiOutlineHeart,
-  AiOutlineShoppingCart,
-  AiOutlineSearch,
-} from 'react-icons/ai';
+import { AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai';
 import SearchInput from './search';
 import Profile from './profile';
+import NavLinks from './NavLinks';
 
-const Header = () => {
+interface HeaderProps {
+  navItems: string[];
+}
+
+const Header: React.FC<HeaderProps> = ({ navItems }) => {
   return (
     <header className="fixed top-0 z-10 w-full bg-white shadow">
       <div className="container mx-auto px-6 py-3">
@@ -17,48 +17,10 @@ const Header = () => {
           <div className="text-xl font-semibold text-gray-700">
             <img src="/icon.svg" alt="Logo" className="h-12 w-12" />
           </div>
-          <div className="flex items-center space-x-4">
-            <Link
-              href="#"
-              className="px-4 py-2 text-gray-700 hover:text-gray-900"
-            >
-              Men
-            </Link>
-            <Link
-              href="#"
-              className="px-4 py-2 text-gray-700 hover:text-gray-900"
-            >
-              Women
-            </Link>
-            <Link
-              href="#"
-              className="px-4 py-2 text-gray-700 hover:text-gray-900"
-            >
-              Kids
-            </Link>
-            <Link
-              href="#"
-              className="px-4 py-2 text-gray-700 hover:text-gray-900"
-            >
-              Home & Living
-            </Link>
-            <Link
-              href="#"
-              className="px-4 py-2 text-gray-700 hover:text-gray-900"
-            >
-              Beauty
-            </Link>
-            <Link
-              href="#"
-              className="px-4 py-2 text-gray-700 hover:text-gray-900"
-            >
-              Studio
-            </Link>
-          </div>
+          <NavLinks links={navItems} />
           <div className="mx-4 flex flex-1 items-center justify-center">
             <SearchInput />
           </div>
-
           <div className="flex items-center space-x-4">
             <Profile />
             <Link
