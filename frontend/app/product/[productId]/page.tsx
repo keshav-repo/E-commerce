@@ -13,7 +13,7 @@ export default async function Page({
 }: {
   params: { productId: string };
 }) {
-  const productData = await fetchProduct('6');
+  const productData = await fetchProduct(params.productId);
   const product = productData.data;
 
   return (

@@ -17,6 +17,11 @@ CREATE TABLE product (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+alter table
+    product
+add
+    column gender varchar(30);
+
 CREATE TABLE users (
     userId SERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL,

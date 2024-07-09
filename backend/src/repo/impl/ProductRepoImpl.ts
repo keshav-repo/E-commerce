@@ -42,9 +42,9 @@ class ProductRepoImpl implements ProductRepo {
     }
     async save(product: ProductEntity): Promise<ProductEntity> {
         const query = `
-            INSERT INTO product (name, description, price, category, company, additional_info, images)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING product_id, name, description, price, category, company, additional_info, created_at, updated_at, images
+            INSERT INTO product (name, description, price, category, company, additional_info, images, gender)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING product_id, name, description, price, category, company, additional_info, created_at, updated_at, images, gender
         `;
         const values = [
             product.name,
@@ -54,6 +54,7 @@ class ProductRepoImpl implements ProductRepo {
             product.company,
             product.additionalInfo ? JSON.stringify(product.additionalInfo) : null,
             product.images ? JSON.stringify(product.images) : null,
+            product.gender
         ];
         try {
             const res = await db.execute(query, values);

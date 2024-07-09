@@ -26,6 +26,10 @@ const filters = [
       'Tokyo Talkies',
     ],
   },
+  {
+    criteria: 'Color',
+    values: ['White', 'Black'],
+  },
 ];
 
 const products = [
@@ -46,33 +50,6 @@ const products = [
     price: 749,
     originalPrice: 3499,
     discount: 2750,
-  },
-  {
-    id: 3,
-    image: 'https://via.placeholder.com/300x400',
-    brand: 'KETCH',
-    name: 'Floral A-Line Tie-Up Neck Dress',
-    price: 399,
-    originalPrice: 949,
-    discount: 550,
-  },
-  {
-    id: 4,
-    image: 'https://via.placeholder.com/300x400',
-    brand: 'Azira',
-    name: 'Pure Cotton Fit & Flare Dress',
-    price: 899,
-    originalPrice: 2099,
-    discount: 1200,
-  },
-  {
-    id: 5,
-    image: 'https://via.placeholder.com/300x400',
-    brand: 'GOLDSTROMS',
-    name: 'Printed A-Line Ethnic Dress',
-    price: 1291,
-    originalPrice: 1699,
-    discount: 408,
   },
 ];
 
