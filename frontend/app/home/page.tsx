@@ -1,23 +1,20 @@
 import { Metadata } from 'next';
-// import MyComponent from '../lib/MyComponent';
 import CookirManager from '../ui/login/CookieManager';
+import ProductCategories from '../ui/home/ProductCategories';
+import { fetchCategoryInfo } from '../lib/fetchProduct';
+import { CategoryItem, ProductCategoriesProps } from '../lib/definitions';
 
-// Ensure you have metadata for the page
 export const metadata: Metadata = {
   title: 'Home page',
   description: 'Home page description',
 };
 
-export default function Page({
-  token,
-  username,
-}: {
-  token: string | null;
-  username: string | null;
-}) {
+export default async function Page() {
+  const categoryBriefData: CategoryItem[] = await fetchCategoryInfo();
+
   return (
     <main className="pt-16">
-      <CookirManager />
+      <ProductCategories categories={categoryBriefData} />
     </main>
   );
 }
