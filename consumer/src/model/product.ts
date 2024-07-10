@@ -5,6 +5,7 @@ export interface Product {
     category: string;
     company?: string;
     description: string;
+    gender: string;
     additionalInfo?: {
         specifications?: {
             [key: string]: string;

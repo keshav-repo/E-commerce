@@ -1,7 +1,7 @@
 import { Client } from '@elastic/elasticsearch';
 import { WriteResponseBase } from '@elastic/elasticsearch/lib/api/types';
 
-const ES_HOST = 'http://localhost:9800',
+const ES_HOST = 'http://localhost:9700',
     ES_USERNAME = 'elastic',
     ES_PASSWORD = 'password@123'
 

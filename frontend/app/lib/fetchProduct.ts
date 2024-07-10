@@ -1,4 +1,4 @@
-import { CategoryItem, ProductCategoriesProps } from "./definitions";
+import { CategoryItem } from "./definitions";
 
 export async function fetchProduct(productId: string) {
     const res = await fetch(`http://localhost:8080/api/product?productId=${productId}`);
