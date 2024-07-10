@@ -6,6 +6,7 @@ import convertionUtility from "../../utility/conversionUtils"
 import L from "../../helper/logger";
 import conversionUtils from "../../utility/conversionUtils";
 import { produceMessage } from "../../utility/kafkaUtility";
+import { ProductByCategoryResponse } from "../../response/ProductByCategoryResponse";
 
 class ProductServiceImpl implements ProductService {
     private productRepo: ProductRepo;
@@ -35,6 +36,14 @@ class ProductServiceImpl implements ProductService {
             return productRes;
         } catch (error) {
             throw new Error("Unable to save product");
+        }
+    }
+    async getCategoryInfo(): Promise<ProductByCategoryResponse[] | null> {
+        try {
+            return this.productRepo.findProductBriefByCategory();
+        } catch (err) {
+            L.error(err);
+            throw new Error("Unable to fecth product brief by category");
         }
     }
 }

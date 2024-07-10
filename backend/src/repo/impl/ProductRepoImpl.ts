@@ -2,7 +2,7 @@ import { ProductRepo } from "../ProductRepo";
 import L from "../../helper/logger";
 import { ProductEntity } from "../../entity/ProductEntity";
 import { db } from "../../db";
-import { produceMessage } from "../../utility/kafkaUtility";
+import { ProductByCategoryResponse } from "../../response/ProductByCategoryResponse";
 
 class ProductRepoImpl implements ProductRepo {
 
@@ -74,6 +74,28 @@ class ProductRepoImpl implements ProductRepo {
         } catch (error) {
             L.error(error);
             throw new Error(`Unable to save product in db`);
+        }
+    }
+
+    async findProductBriefByCategory(): Promise<ProductByCategoryResponse[] | null> {
+        const query = "SELECT DISTINCT ON (category) name, images->0 AS first_image, category FROM product";
+        const values: any[] = [];
+
+        try {
+            const res = await db.execute(query, values);
+            const productByCategoryResponseArr: ProductByCategoryResponse[] = [];
+            res.rows.forEach(row => {
+                const item: ProductByCategoryResponse = {
+                    imgSrc: row.first_image,
+                    title: row.category
+                }
+                productByCategoryResponseArr.push(item);
+            });
+
+            return productByCategoryResponseArr;
+        } catch (error) {
+            L.error(error);
+            throw new Error(`Unable to find product by ID`);
         }
     }
 }
