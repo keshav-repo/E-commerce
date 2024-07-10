@@ -1,6 +1,5 @@
-import { Product } from "../../model/product";
 import { SearchRepo } from "../../repo/SearchRepo";
-import { SearchResult } from "../../response/SearchResult";
+import { EsQuery, SearchResult } from "../../response/AggregationResponse";
 import { SearchService } from "../SearchService";
 
 class SearchServiceImpl implements SearchService {
@@ -10,11 +9,11 @@ class SearchServiceImpl implements SearchService {
         this.searchProduct = this.searchProduct.bind(this);
     }
 
-    async searchProduct(query: string, page: number, size: number): Promise<Product[] | null> {
+    async searchProduct(query: EsQuery, page: number, size: number): Promise<SearchResult | null> {
         try {
-            const result: SearchResult<Product> | null = await this.searchRepo.queryProduct(query, page, size);
+            const result: SearchResult | null = await this.searchRepo.queryProduct(query, page, size);
             if (result) {
-                return result.items;
+                return result;
             } else {
                 return null;
             }

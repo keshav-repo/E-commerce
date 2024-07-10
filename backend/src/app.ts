@@ -6,9 +6,12 @@ import { passport } from './middleware';
 import cors from 'cors';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import { ping } from "./db/es";
 
 db.connect();
 connectKafka();
+// ping elastic search to check connection
+ping();
 
 const app: Express = express();
 app.use(cors());

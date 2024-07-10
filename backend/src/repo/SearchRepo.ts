@@ -1,6 +1,6 @@
-import { Product } from "../model/product";
-import { SearchResult } from "../response/SearchResult";
+import { EsQuery, SearchResult } from "../response/AggregationResponse";
+
 
 export interface SearchRepo {
-    queryProduct(query: string, page: number, size: number): Promise<SearchResult<Product> | null>;
+    queryProduct(query: EsQuery, page: number, size: number): Promise<SearchResult | null>;
 }
