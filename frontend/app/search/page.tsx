@@ -26,7 +26,10 @@ export default async function Page({
   }
   var queryString: string = await encodeURIComponent(JSON.stringify(query));
 
-  const searchData: SearchApiResponse = await fetchSearch(q ? q : queryString, parseInt(pageNo), parseInt(pageSize));
+  const searchData: SearchApiResponse = await fetchSearch(queryString, parseInt(pageNo), parseInt(pageSize));
+
+  console.log('search data is');
+  console.log(searchData);
 
   return (
     <main className="container mx-auto mt-20 px-6 py-6">
