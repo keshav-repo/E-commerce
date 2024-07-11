@@ -4,23 +4,36 @@ import { fetchSearch } from '../lib/fetchProduct';
 import { SeaechQuery, SearchApiResponse } from '../lib/definitions';
 import ProductListSection from '../ui/search/ProductListSection';
 
+
 export const metadata: Metadata = {
   title: 'Search page',
   description: 'Search page description',
 };
 
-export default async function Page() {
-  const query: SeaechQuery = {
-    category: 'Kurtas'
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
+  const pageNo: string = searchParams["page"] ?? "1";
+  const pageSize: string = searchParams["size"] ?? "10";
+  const category: string = searchParams["category"] ?? "";
+  const q: string = searchParams["q"] ?? "";
+
+  var query: SeaechQuery = {
+    category: category,
+    name: q
   }
-  const searchData: SearchApiResponse = await fetchSearch(query, 1, 10);
+  var queryString: string = await encodeURIComponent(JSON.stringify(query));
+
+  const searchData: SearchApiResponse = await fetchSearch(q ? q : queryString, parseInt(pageNo), parseInt(pageSize));
 
   return (
     <main className="container mx-auto mt-20 px-6 py-6">
       <div className="flex space-x-6">
         <FilterSection filters={searchData.filters} />
         <ProductListSection products={searchData.items} total={searchData.totalItem} currentPage={searchData.currentPage}
-          pageSize={searchData.pageSize} totalPage={searchData.totalPage} />
+          pageSize={searchData.pageSize} totalPage={searchData.totalPage} category={category} q={q} />
       </div>
     </main>
   );

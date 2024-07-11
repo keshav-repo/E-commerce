@@ -1,17 +1,30 @@
+'use client';
+
 import React from 'react';
 import { ProductListSectionProps } from '@/app/lib/definitions';
 import ProductCard from './ProductCard';
+import { useRouter } from 'next/navigation';
 
 const ProductListSection: React.FC<ProductListSectionProps> = ({
   products,
   total,
   pageSize,
   currentPage,
-  totalPage
+  totalPage,
+  category,
+  q
 }) => {
-  console.log(`curr page ${currentPage}, ${pageSize}`)
 
-
+  const router = useRouter();
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPage) {
+      if (q) {
+        router.push(`search?page=${newPage}&size=${pageSize}&q=${q}`);
+      } else {
+        router.push(`search?page=${newPage}&size=${pageSize}&category=${category}`);
+      }
+    }
+  };
 
   return (
     <section className="w-3/4">
@@ -34,7 +47,9 @@ const ProductListSection: React.FC<ProductListSectionProps> = ({
         ))}
       </div>
       <div className="flex justify-center mt-4 space-x-4">
-        <button disabled={currentPage <= 1} className='px-4 py-2 text-white bg-blue-500 rounded disabled:bg-gray-300'>
+        <button disabled={currentPage <= 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          className='px-4 py-2 text-white bg-blue-500 rounded disabled:bg-gray-300'>
           Previous
         </button>
         <span className="flex items-center text-lg font-medium">
@@ -42,7 +57,7 @@ const ProductListSection: React.FC<ProductListSectionProps> = ({
         </span>
         <button disabled={currentPage >= totalPage}
           className="px-4 py-2 text-white bg-blue-500 rounded disabled:bg-gray-300"
-
+          onClick={() => handlePageChange(currentPage + 1)}
         >
           Next
         </button>

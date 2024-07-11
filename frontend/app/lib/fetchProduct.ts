@@ -12,9 +12,8 @@ export async function fetchCategoryInfo(): Promise<CategoryItem[]> {
     return data.data;
 }
 
-export async function fetchSearch(searchQuery: SeaechQuery, page: number, size: number): Promise<SearchApiResponse> {
-    const query = encodeURIComponent(JSON.stringify(searchQuery));
-    const url = `http://localhost:8080/api/search?page=${page}&size=${size}&query=${query}`;
+export async function fetchSearch(searchQuery: string, page: number, size: number): Promise<SearchApiResponse> {
+    const url = `http://localhost:8080/api/search?page=${page}&size=${size}&query=${searchQuery}`;
     const res = await fetch(url);
     const data = await res.json();
     return data.data;

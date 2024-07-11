@@ -75,5 +75,7 @@ export interface ProductListSectionProps {
   total: number,
   pageSize: number,
   currentPage: number,
-  totalPage: number
+  totalPage: number,
+  category?: string,
+  q?: string;
 }
