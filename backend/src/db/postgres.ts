@@ -25,7 +25,7 @@ class Postgres {
   public connect = async () => {
     try {
       this.poolClient = await this.pool.connect();
-      L.info("client connected");
+      L.info("postgres client connected");
     } catch (err) {
       L.error("error connecting to db");
       process.exit(1);

@@ -14,11 +14,13 @@ export default async function Page() {
     category: 'Kurtas'
   }
   const searchData: SearchApiResponse = await fetchSearch(query, 1, 10);
+
   return (
     <main className="container mx-auto mt-20 px-6 py-6">
       <div className="flex space-x-6">
         <FilterSection filters={searchData.filters} />
-        <ProductListSection products={searchData.items} total={searchData.total} />
+        <ProductListSection products={searchData.items} total={searchData.totalItem} currentPage={searchData.currentPage}
+          pageSize={searchData.pageSize} totalPage={searchData.totalPage} />
       </div>
     </main>
   );

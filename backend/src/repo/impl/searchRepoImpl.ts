@@ -12,9 +12,10 @@ class SearchRepoImpl implements SearchRepo {
         this.client = client;
     }
 
-    async queryProduct(query: EsQuery, page: number = 1, size: number = 10): Promise<SearchResult | null> {
+    async queryProduct(query: EsQuery, page: number, size: number): Promise<SearchResult | null> {
         try {
             const from = (page - 1) * size;
+
             const jsonData: any = {
                 _source: ["name", "price", "company", "productId"],
                 aggs: {
@@ -110,16 +111,22 @@ class SearchRepoImpl implements SearchRepo {
 
                     const esResult: SearchResult = {
                         items: items,
-                        total: total.value,
+                        totalItem: total.value,
                         filters: [companyFilter, genderFilter],
                         minPrice: minPrice,
-                        maxPrice: maxPrice
+                        maxPrice: maxPrice,
+                        currentPage: page,
+                        pageSize: size,
+                        totalPage: Math.ceil(total.value / size)
                     };
                     return esResult;
                 } else {
                     const esResult: SearchResult = {
                         items: items,
-                        total: total.value
+                        totalItem: total.value,
+                        currentPage: page,
+                        pageSize: size,
+                        totalPage: Math.ceil(total.value / size)
                     };
                     return esResult;
                 }

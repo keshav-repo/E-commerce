@@ -9,11 +9,12 @@ class SearchServiceImpl implements SearchService {
         this.searchProduct = this.searchProduct.bind(this);
     }
 
-    async searchProduct(query: EsQuery, page: number, size: number): Promise<SearchResult | null> {
+    async searchProduct(query: EsQuery, page: number = 1, size: number = 10): Promise<SearchResult | null> {
         try {
             const result: SearchResult | null = await this.searchRepo.queryProduct(query, page, size);
             if (result) {
                 return result;
+
             } else {
                 return null;
             }

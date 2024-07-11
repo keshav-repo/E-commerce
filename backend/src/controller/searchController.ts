@@ -26,11 +26,11 @@ class SearchController {
         }
         const page: string = req.query.page as string;
         const size: string = req.query.size as string;
-        if (!query || !page || !size) {
+        if (!query) {
             return next(new BadRequestError(ResponseTypes.EMPTY_PRODUCT_QUERY.message, ResponseTypes.PRODUCT_ID_REQUIRED_FOUND.code));
         }
         try {
-            const product: SearchResult | null = await this.searchService.searchProduct(query, Number(page), Number(size));
+            const product: SearchResult | null = await this.searchService.searchProduct(query, page ? parseInt(page) : undefined, size ? Number(size) : undefined);
             if (product) {
                 res.json(new SuccessResponse(ResponseTypes.SEARCH_SUCCESS, product));
             } else {

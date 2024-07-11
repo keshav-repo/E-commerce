@@ -26,11 +26,14 @@ export interface SearchFilter {
 }
 
 export interface SearchResult {
-    total: number;
+    totalItem: number;
     items: ProductSearchDto[];
     filters?: SearchFilter[],
     minPrice?: number,
-    maxPrice?: number
+    maxPrice?: number,
+    pageSize: number,
+    currentPage: number,
+    totalPage: number
 }
 
 export interface EsQuery {

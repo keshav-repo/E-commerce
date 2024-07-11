@@ -1,16 +1,18 @@
 import React from 'react';
-import { SearcProducthData } from '@/app/lib/definitions';
+import { ProductListSectionProps } from '@/app/lib/definitions';
 import ProductCard from './ProductCard';
-
-interface ProductListSectionProps {
-  products: SearcProducthData[];
-  total: number;
-}
 
 const ProductListSection: React.FC<ProductListSectionProps> = ({
   products,
   total,
+  pageSize,
+  currentPage,
+  totalPage
 }) => {
+  console.log(`curr page ${currentPage}, ${pageSize}`)
+
+
+
   return (
     <section className="w-3/4">
       <div className="mb-4 flex items-center justify-between">
@@ -30,6 +32,20 @@ const ProductListSection: React.FC<ProductListSectionProps> = ({
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
+      </div>
+      <div className="flex justify-center mt-4 space-x-4">
+        <button disabled={currentPage <= 1} className='px-4 py-2 text-white bg-blue-500 rounded disabled:bg-gray-300'>
+          Previous
+        </button>
+        <span className="flex items-center text-lg font-medium">
+          Page {currentPage} of {totalPage}
+        </span>
+        <button disabled={currentPage >= totalPage}
+          className="px-4 py-2 text-white bg-blue-500 rounded disabled:bg-gray-300"
+
+        >
+          Next
+        </button>
       </div>
     </section>
   );

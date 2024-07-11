@@ -53,10 +53,13 @@ export interface SearcProducthData {
 
 export interface SearchApiResponse {
   items: SearcProducthData[];
-  total: number;
+  totalItem: number;
   filters: SearchFilter[],
   minPrice: number,
-  maxPrice: number
+  maxPrice: number,
+  pageSize: number,
+  currentPage: number,
+  totalPage: number
 }
 
 export interface FilterSectionProps {
@@ -65,4 +68,12 @@ export interface FilterSectionProps {
 
 export interface ProductCardProps {
   product: SearcProducthData;
+}
+
+export interface ProductListSectionProps {
+  products: SearcProducthData[],
+  total: number,
+  pageSize: number,
+  currentPage: number,
+  totalPage: number
 }
