@@ -15,7 +15,9 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
       <div className="container mx-auto px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="text-xl font-semibold text-gray-700">
-            <img src="/icon.svg" alt="Logo" className="h-12 w-12" />
+            <Link href="/home">
+              <img src="/icon.svg" alt="Logo" className="h-12 w-12" />
+            </Link>
           </div>
           <NavLinks links={navItems} />
           <div className="mx-4 flex flex-1 items-center justify-center">
