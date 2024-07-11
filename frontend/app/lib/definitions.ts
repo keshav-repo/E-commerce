@@ -26,3 +26,43 @@ export interface CategoryItem {
 export interface ProductCategoriesProps {
   categories: CategoryItem[];
 }
+
+export interface SeaechQuery {
+  category?: string;
+  name?: string
+}
+export interface FilterItem {
+  name: string;
+  count: number
+}
+
+export interface SearchFilter {
+  criteria: string;
+  values: FilterItem[]
+}
+
+export interface SearcProducthData {
+  id: number;
+  images: string[];
+  brand: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+}
+
+export interface SearchApiResponse {
+  items: SearcProducthData[];
+  total: number;
+  filters: SearchFilter[],
+  minPrice: number,
+  maxPrice: number
+}
+
+export interface FilterSectionProps {
+  filters: SearchFilter[];
+}
+
+export interface ProductCardProps {
+  product: SearcProducthData;
+}

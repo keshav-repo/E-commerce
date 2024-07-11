@@ -5,5 +5,7 @@ export const CONSTANTS = {
     TOKEN: 'token',
     REFRESH_TOKEN: 'refreshToken',
     DISPLAY_NAME: 'displayname',
-    PRODUCTION_ENV: 'production'
+    PRODUCTION_ENV: 'production',
+    COMPANY_CRITERIA: 'brands',
+    GENDER_CRITERIS: 'gender'
 };

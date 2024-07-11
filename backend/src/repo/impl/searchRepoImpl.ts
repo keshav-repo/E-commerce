@@ -3,8 +3,8 @@ import { SearchRepo } from "../SearchRepo";
 import L from "../../helper/logger";
 import { Client } from "@elastic/elasticsearch";
 import { SearchResponse } from "@elastic/elasticsearch/lib/api/types";
-import { CompanyFilter, EsQuery, GenderFilter, ProductSearchDto, SearchResult } from "../../response/AggregationResponse";
-
+import { CompanyFilter, EsQuery, FilterItem, GenderFilter, ProductSearchDto, SearchFilter, SearchResult } from "../../response/AggregationResponse";
+import { CONSTANTS } from "../../config";
 
 class SearchRepoImpl implements SearchRepo {
     private client: Client;
@@ -46,8 +46,8 @@ class SearchRepoImpl implements SearchRepo {
                         category: query
                     }
                 },
-                from: 2,
-                size: 10
+                from: from,
+                size: size
             }
 
             if (query.category) {
@@ -60,7 +60,7 @@ class SearchRepoImpl implements SearchRepo {
             if (query.name) {
                 jsonData['query'] = {
                     match: {
-                        category: query.category!
+                        name: query.name!
                     }
                 }
             }
@@ -85,17 +85,24 @@ class SearchRepoImpl implements SearchRepo {
 
                 if (aggregations) {
                     const distinctCompanies: any[] = aggregations.distinct_companies.buckets;
-                    const companyFilter: CompanyFilter[] = distinctCompanies.map(bucket => ({
+                    const companyItems: FilterItem[] = distinctCompanies.map(bucket => ({
                         name: bucket.key,
-                        itemCount: bucket.doc_count
+                        count: bucket.doc_count
                     }));
+                    const companyFilter: SearchFilter = {
+                        criteria: CONSTANTS.COMPANY_CRITERIA,
+                        values: companyItems
+                    }
 
                     const distinctGender: any[] = aggregations.distinct_gender.buckets;
-
-                    const genderFilter: GenderFilter[] = distinctGender.map(bucket => ({
+                    const genderItems: FilterItem[] = distinctGender.map(bucket => ({
                         name: bucket.key,
-                        itemCount: bucket.doc_count
+                        count: bucket.doc_count
                     }));
+                    const genderFilter: SearchFilter = {
+                        criteria: CONSTANTS.GENDER_CRITERIS,
+                        values: genderItems
+                    }
 
                     const minPrice = aggregations.min_price.value;
 
@@ -103,15 +110,16 @@ class SearchRepoImpl implements SearchRepo {
 
                     const esResult: SearchResult = {
                         items: items,
-                        total: total,
-                        companyFilter: companyFilter,
-                        genderFilter: genderFilter
+                        total: total.value,
+                        filters: [companyFilter, genderFilter],
+                        minPrice: minPrice,
+                        maxPrice: maxPrice
                     };
                     return esResult;
                 } else {
                     const esResult: SearchResult = {
                         items: items,
-                        total: total
+                        total: total.value
                     };
                     return esResult;
                 }

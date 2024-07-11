@@ -1,22 +1,11 @@
+import { ProductCardProps } from '@/app/lib/definitions';
 import React from 'react';
-
-interface Product {
-  id: number;
-  image: string;
-  brand: string;
-  name: string;
-  price: number;
-}
-
-interface ProductCardProps {
-  product: Product;
-}
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div className="rounded-lg bg-white px-4 py-1 shadow-md">
       <img
-        src={product.image}
+        src={product.images[0]}
         alt={product.name}
         className="mb-4 h-64 w-full rounded-lg object-cover"
       />

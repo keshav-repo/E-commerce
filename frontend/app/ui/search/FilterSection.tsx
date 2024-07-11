@@ -1,13 +1,6 @@
+import { FilterSectionProps, SearchFilter } from '@/app/lib/definitions';
 import React from 'react';
 
-interface Filter {
-  criteria: string;
-  values: string[];
-}
-
-interface FilterSectionProps {
-  filters: Filter[];
-}
 
 const FilterSection: React.FC<FilterSectionProps> = ({ filters }) => {
   return (
@@ -26,10 +19,10 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters }) => {
                   <input
                     type="checkbox"
                     name={filter.criteria}
-                    value={value}
+                    value={value.name}
                     className="form-checkbox text-pink-600"
                   />
-                  <span className="ml-2">{value}</span>
+                  <span className="ml-2">{value.name} ({value.count})</span>
                 </label>
               ))}
             </div>

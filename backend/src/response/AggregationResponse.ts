@@ -15,11 +15,22 @@ export interface ProductSearchDto {
     company: string;
 }
 
+export interface FilterItem {
+    name: string;
+    count: number
+}
+
+export interface SearchFilter {
+    criteria: string;
+    values: FilterItem[]
+}
+
 export interface SearchResult {
     total: number;
     items: ProductSearchDto[];
-    genderFilter?: GenderFilter[];
-    companyFilter?: CompanyFilter[];
+    filters?: SearchFilter[],
+    minPrice?: number,
+    maxPrice?: number
 }
 
 export interface EsQuery {

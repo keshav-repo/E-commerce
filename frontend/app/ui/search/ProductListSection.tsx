@@ -1,27 +1,20 @@
 import React from 'react';
+import { SearcProducthData } from '@/app/lib/definitions';
 import ProductCard from './ProductCard';
 
-interface Product {
-  id: number;
-  image: string;
-  brand: string;
-  name: string;
-  price: number;
-  originalPrice: number;
-  discount: number;
-}
-
 interface ProductListSectionProps {
-  products: Product[];
+  products: SearcProducthData[];
+  total: number;
 }
 
 const ProductListSection: React.FC<ProductListSectionProps> = ({
   products,
+  total,
 }) => {
   return (
     <section className="w-3/4">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-bold"> 125812 items</h2>
+        <h2 className="text-2xl font-bold">{total} items</h2>
         <div>
           <label htmlFor="sort" className="text-gray-700">
             Sort by:
