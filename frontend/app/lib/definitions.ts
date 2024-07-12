@@ -79,3 +79,10 @@ export interface ProductListSectionProps {
   category?: string,
   q?: string;
 }
+
+
+export interface ProductDetailsSectionProps {
+  specifications: {
+    [key: string]: string;
+  }
+}

@@ -9,10 +9,7 @@ export default function ProductInfo({ product }: { product: Product }) {
         <span className="text-2xl font-bold text-red-500">
           ₹{product.price}
         </span>
-        <span className="ml-2 text-gray-500 line-through">₹999</span>
-        <span className="ml-2 text-green-500">(₹400 OFF)</span>
       </div>
-      <p className="mt-4">inclusive of all taxes</p>
     </div>
   );
 }

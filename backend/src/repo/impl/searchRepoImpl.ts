@@ -58,7 +58,7 @@ class SearchRepoImpl implements SearchRepo {
                     }
                 }
             }
-            if (query.name) {
+            else if (query.name) {
                 jsonData['query'] = {
                     match: {
                         name: query.name!
@@ -66,9 +66,6 @@ class SearchRepoImpl implements SearchRepo {
                 }
             }
             jsonData._source.unshift("images");
-
-            L.info('json data is');
-            L.info(JSON.stringify(jsonData));
 
             const result: SearchResponse = await this.client.search<Product>({
                 index: 'product',
@@ -131,6 +128,7 @@ class SearchRepoImpl implements SearchRepo {
                     return esResult;
                 }
             } else {
+
                 console.warn('No products found');
                 return null;
             }

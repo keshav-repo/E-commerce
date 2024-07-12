@@ -1,9 +1,9 @@
-import { CategoryItem, SeaechQuery, SearchApiResponse } from "./definitions";
+import { CategoryItem, Product, SeaechQuery, SearchApiResponse } from "./definitions";
 
-export async function fetchProduct(productId: string) {
+export async function fetchProduct(productId: string): Promise<Product> {
     const res = await fetch(`http://localhost:8080/api/product?productId=${productId}`);
     const data = await res.json();
-    return data;
+    return data.data;
 }
 
 export async function fetchCategoryInfo(): Promise<CategoryItem[]> {

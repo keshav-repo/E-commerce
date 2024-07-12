@@ -61,12 +61,6 @@ export default function DeliveryOptions({ productId }: DeliveryOptionsProps) {
           )}
         </div>
       )}
-
-      <ul className="mt-4 space-y-2">
-        <li>100% Original Products</li>
-        <li>Pay on delivery might be available</li>
-        <li>Easy 14 days returns and exchanges</li>
-      </ul>
     </div>
   );
 }
