@@ -1,6 +1,7 @@
 import { CartRepo } from "../CartRepo";
 import L from "../../helper/logger";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, cartitems } from "@prisma/client";
+import CartItem from "../../model/cart";
 
 class CartRepoImpl implements CartRepo {
 
@@ -63,6 +64,44 @@ class CartRepoImpl implements CartRepo {
         } catch (error) {
             L.error(`Error adding product ${productId} to cart ${cartId} for user ${userId}: ${error}`);
             throw new Error(`Failed to add product ${productId} to cart for user ${userId}`);
+        }
+    }
+
+    public getCartDetails = async (userId: number): Promise<CartItem[]> => {
+        try {
+            const cart = await this.prisma.carts.findFirst({
+                where: { userid: userId },
+                select: { cartid: true }
+            });
+
+            if (!cart) {
+                throw new Error(`No cart found for user with ID ${userId}`);
+            }
+
+            const cartDetails = await this.prisma.cartitems.findMany({
+                where: { cartid: cart.cartid },
+                include: {
+                    product: true
+                }
+            });
+
+            const cartItemList: CartItem[] = cartDetails.map(item => {
+                const images = item.product.images as unknown as string[];
+                return {
+                    cartId: item.cartid,
+                    cartItemId: item.cartitemid,
+                    name: item.product.name,
+                    image: images[0],
+                    quantity: item.quantity,
+                    price: item.price,
+                    productId: item.productid
+                };
+            });
+            return cartItemList;
+
+        } catch (error) {
+            L.error(`Error fetching cart details for user ${userId}: ${error}`);
+            throw new Error(`Failed to fetch cart details for user ${userId}`);
         }
     }
 }

@@ -5,6 +5,7 @@ import { CartService } from "../CartService";
 import { User } from "../../model/User";
 import { UserService } from "../UserService";
 import L from "../../helper/logger";
+import CartItem from "../../model/cart";
 
 class CartServiceImpl implements CartService {
     private cartRepo: CartRepo;
@@ -23,6 +24,17 @@ class CartServiceImpl implements CartService {
         } catch (err) {
             L.error(err);
             throw new Error("Internal error adding to cart");
+        }
+    }
+    async getCartDetails(userName: string): Promise<CartItem[]> {
+        try {
+            const user: User = await this.userService.findUser(userName);
+            const userId: number = parseInt(user.userId!);
+
+            return await this.cartRepo.getCartDetails(userId);
+        } catch (err) {
+            L.error(err);
+            throw new Error("Internal error fetching cart details");
         }
     }
 }
