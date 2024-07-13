@@ -4,6 +4,7 @@ import searchRouter from "./searchRoute";
 import userRouter from "./userRouter";
 import googleAuthRouter from "./googleAuthRoutes";
 import homePageRouter from "./homePageRoutes";
+import cartRouter from "./cartRoutes";
 
 export default (app: Express): void => {
   app.use("/api/product", productRouter);
@@ -11,4 +12,5 @@ export default (app: Express): void => {
   app.use("/api/user", userRouter);
   app.use("/api/view/home", homePageRouter);
   app.use("", googleAuthRouter);
+  app.use("/api/cart", cartRouter);
 };

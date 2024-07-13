@@ -13,6 +13,7 @@ import { compareHash } from "../../utility/encryption";
 import { generateRefreshToken, generateToken } from "../../utility/jwtHelper";
 import { UserService } from "../UserService";
 import { REFRESH_TOKEN_EXPIRY, ACCESS_TOKEN_EXPIRY } from "../../config";
+import { use } from "passport";
 
 class UserServiceImpl implements UserService {
     private userRepo: UserRepository;
@@ -64,6 +65,19 @@ class UserServiceImpl implements UserService {
             }
         } catch (err) {
             L.error('error in findByUsername ', err);
+            if (err instanceof NotFoundError || err instanceof UnauthorizedError)
+                throw err;
+            throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+        }
+    }
+    async findUser(username: string): Promise<User> {
+        try {
+            const user: User | null = await this.userRepo.findByUsername(username);
+            if (!user) {
+                throw new NotFoundError(ResponseTypes.USER_NOT_FOUND.message, ResponseTypes.USER_NOT_FOUND.code);
+            }
+            return user;
+        } catch (err) {
             if (err instanceof NotFoundError || err instanceof UnauthorizedError)
                 throw err;
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);

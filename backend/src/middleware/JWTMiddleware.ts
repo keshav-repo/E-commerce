@@ -21,7 +21,7 @@ class JWTMiddleware {
         if (token) {
             try {
                 const payload: customJwtPayload = verifyToken(token, USER_AUTH_KEYS!);
-                (req as any).user = {
+                (req as any).currUser = {
                     username: payload.username,
                 };
                 next();
@@ -37,7 +37,7 @@ class JWTMiddleware {
                             sameSite: 'strict'
                         });
 
-                        (req as any).user = { username: refreshPayload.username };
+                        (req as any).currUser = { username: refreshPayload.username };
                         next();
                     } catch (refreshError) {
                         res.sendStatus(403);
