@@ -47,6 +47,14 @@ kafka-topics --create --topic product --partitions 2 --replication-factor 2 --if
 # consume product topic
 kafka-console-consumer --topic product --from-beginning --bootstrap-server localhost:29092
 
+```
+
+# prisma
+
+```shell
+dotenv -e .env.development -- npx prisma introspect
+
+npm run introspect:dev
 
 
 ```

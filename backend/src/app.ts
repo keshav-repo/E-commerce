@@ -7,11 +7,16 @@ import cors from 'cors';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import { ping } from "./db/es";
+import { pingDb } from "./db";
+
 
 db.connect();
 connectKafka();
 // ping elastic search to check connection
 ping();
+
+// ping postgres using prisma 
+pingDb();
 
 const app: Express = express();
 app.use(cors());

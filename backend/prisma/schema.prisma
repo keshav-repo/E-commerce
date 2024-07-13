@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model product {
+  productid       Int         @id @default(autoincrement())
+  name            String      @db.VarChar(255)
+  description     String?
+  price           Decimal     @db.Decimal(10, 2)
+  category        String      @db.VarChar(100)
+  company         String      @db.VarChar(100)
+  images          Json?
+  additional_info Json?
+  createdat       DateTime?   @default(now()) @db.Timestamp(6)
+  updatedat       DateTime?   @default(now()) @db.Timestamp(6)
+  gender          String?     @db.VarChar(30)
+  cartitems       cartitems[]
+}
+
+model cartitems {
+  cartitemid Int       @id @default(autoincrement())
+  cartid     Int
+  productid  Int
+  quantity   Int
+  price      Decimal   @db.Decimal(10, 2)
+  createdat  DateTime? @default(now()) @db.Timestamp(6)
+  updatedat  DateTime? @default(now()) @db.Timestamp(6)
+  carts      carts     @relation(fields: [cartid], references: [cartid], onDelete: Cascade, onUpdate: NoAction)
+  product    product   @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([cartid, productid], map: "unique_cart_product")
+  @@index([cartid], map: "idx_cart_items_cart")
+  @@index([productid], map: "idx_cart_items_product")
+}
+
+model carts {
+  cartid    Int         @id @default(autoincrement())
+  userid    Int
+  createdat DateTime?   @default(now()) @db.Timestamp(6)
+  updatedat DateTime?   @default(now()) @db.Timestamp(6)
+  cartitems cartitems[]
+  users     users       @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([cartid], map: "idx_cart_user")
+}
+
+model users {
+  userid       Int     @id @default(autoincrement())
+  username     String  @db.VarChar(100)
+  password     String? @db.VarChar(100)
+  email        String? @unique @db.VarChar(100)
+  name         String? @db.VarChar(100)
+  profilephoto String?
+  carts        carts[]
+}
