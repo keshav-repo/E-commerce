@@ -50,4 +50,4 @@ CREATE INDEX idx_cart_user ON carts(cartId);
 CREATE INDEX idx_cart_items_cart ON cartItems(cartId);
 CREATE INDEX idx_cart_items_product ON cartItems(productId);
 
-
+ADD CONSTRAINT unique_cart_product UNIQUE (cartId, productId);
