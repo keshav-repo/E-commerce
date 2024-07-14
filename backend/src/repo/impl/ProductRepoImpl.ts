@@ -12,7 +12,7 @@ class ProductRepoImpl implements ProductRepo {
     }
 
     async findByProductId(productId: Number): Promise<ProductEntity | null> {
-        const query = "SELECT * FROM product WHERE product_id = $1";
+        const query = "SELECT * FROM product WHERE productid = $1";
         const values = [productId];
 
         try {

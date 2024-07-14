@@ -44,6 +44,8 @@ async function main() {
         }
     }
 
+    await postgres.disconnect();
+
     process.exit(1);
 }
 

@@ -56,6 +56,7 @@ async function main() {
         process.exit(1);
     }
 
+    await postgresEcommerce.disconnect();
     process.exit(1);
 }
 
