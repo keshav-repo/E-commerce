@@ -6,3 +6,4 @@ log
 package-lock.json
 
 backend/package-lock.json
+prisma/migrations

@@ -5,6 +5,8 @@ import WishList from "../../model/wishlist";
 import { WishListRepo } from "../WishListRepo";
 import { BadRequestError } from "../../error/BadRequestError";
 import { ResponseTypes } from "../../config/ResponseTypes";
+import { use } from "passport";
+import { BaseError } from "../../error/BaseError";
 
 class WishListRepoImpl implements WishListRepo {
     private prisma: PrismaClient;
@@ -43,15 +45,27 @@ class WishListRepoImpl implements WishListRepo {
 
     public async removeItemFromWishlist(userId: number, productId: number): Promise<void> {
         try {
+            const wish = await this.prisma.wishlist.findFirst({
+                where: {
+                    userid: userId,
+                    productid: productId
+                }
+            });
+            if (!wish) {
+                throw new BadRequestError(ResponseTypes.PRODUCT_NOT_FOUND_IN_WISHLIST.message, ResponseTypes.PRODUCT_NOT_FOUND_IN_WISHLIST.code);
+            }
             await this.prisma.wishlist.deleteMany({
                 where: {
                     userid: userId,
                     productid: productId,
                 },
             });
-            L.info(`Product ${productId} removed from wishlist for user ${userId}`);
         } catch (error) {
             L.error(`Error removing product from wishlist for user ${userId}: ${error}`);
+
+            if (error instanceof BaseError)
+                throw error;
+
             throw new Error(`Failed to remove product from wishlist for user ${userId}`);
         }
     }

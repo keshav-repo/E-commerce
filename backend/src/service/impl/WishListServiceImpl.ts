@@ -32,8 +32,16 @@ class WishListServiceImpl implements WishListService {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }
-    removeItemFromWishlist(userId: number, productId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async removeItemFromWishlist(username: string, productId: number): Promise<void> {
+        const user: User = await this.userService.findUser(username);
+        try {
+            await this.wishListRepo.removeItemFromWishlist(parseInt(user.userId!), productId);
+        } catch (err) {
+            if (err instanceof BaseError)
+                throw err;
+            L.error(`error removing item from wishlist for username: ${username}, productId ${productId} error: ${err}`)
+            throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+        }
     }
     fetchWishList(username: string): Promise<WishList[]> {
         throw new Error("Method not implemented.");
