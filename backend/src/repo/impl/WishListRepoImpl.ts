@@ -1,8 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import L from "../../helper/logger";
 import WishList from "../../model/wishlist";
-import { Decimal } from "@prisma/client/runtime/library";
+
 import { WishListRepo } from "../WishListRepo";
+import { BadRequestError } from "../../error/BadRequestError";
+import { ResponseTypes } from "../../config/ResponseTypes";
 
 class WishListRepoImpl implements WishListRepo {
     private prisma: PrismaClient;
@@ -13,23 +15,27 @@ class WishListRepoImpl implements WishListRepo {
 
     public async addItemToWishlist(wishlist: WishList): Promise<void> {
         const userId: number = wishlist.userId,
-            productId: number = wishlist.productId,
-            name: string = wishlist.name,
-            image: string = wishlist.image,
-            price: Decimal = wishlist.price;
-
+            productId: number = wishlist.productId
         try {
+            const wishes = await this.prisma.wishlist.findFirst({
+                where: {
+                    userid: userId,
+                    productid: productId
+                }
+            })
+            if (wishes) {
+                throw new BadRequestError(ResponseTypes.PRODUCT_ALREADY_IN_WISHLIST.message, ResponseTypes.PRODUCT_ALREADY_IN_WISHLIST.code);
+            }
             await this.prisma.wishlist.create({
                 data: {
                     userid: userId,
-                    productid: productId,
-                    name: name,
-                    image: image,
-                    price: price,
+                    productid: productId
                 },
             });
-            L.info(`Product ${name} added to wishlist for user ${userId}`);
         } catch (error) {
+            if (error instanceof BadRequestError)
+                throw error;
+
             L.error(`Error adding product to wishlist for user ${userId}: ${error}`);
             throw new Error(`Failed to add product to wishlist for user ${userId}`);
         }

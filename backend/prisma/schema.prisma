@@ -63,9 +63,6 @@ model users {
 
 model wishlist {
   id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  image     String    @db.VarChar(255)
-  price     Decimal   @db.Decimal(10, 2)
   productid Int
   userid    Int
   createdat DateTime? @default(now()) @db.Timestamp(6)

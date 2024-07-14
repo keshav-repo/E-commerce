@@ -54,9 +54,6 @@ ALTER TABLE cartitems ADD CONSTRAINT unique_cart_product UNIQUE (cartId, product
 
 CREATE TABLE wishlist (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    image VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
     productid INT NOT NULL,
     userid INT NOT NULL,
     createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
