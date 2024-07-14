@@ -8,10 +8,13 @@ import UserRepositoryImpl from "./impl/UserRepositoryImpl";
 import { CartRepo } from "./CartRepo";
 import CartRepoImpl from "./impl/CartRepoImpl";
 import { prisma } from "../db";
+import WishListRepoImpl from "./impl/WishListRepoImpl";
+
 
 const productRepo: ProductRepo = new ProductRepoImpl(),
     searchRepo: SearchRepo = new SearchRepoImpl(client),
     userRepo: UserRepository = new UserRepositoryImpl(),
-    cartRepo: CartRepo = new CartRepoImpl(prisma);
+    cartRepo: CartRepo = new CartRepoImpl(prisma),
+    wishListRepoImpl: WishListRepoImpl = new WishListRepoImpl(prisma);
 
 export { productRepo, searchRepo, userRepo, cartRepo };

@@ -52,3 +52,16 @@ CREATE INDEX idx_cart_items_product ON cartItems(productId);
 
 ALTER TABLE cartitems ADD CONSTRAINT unique_cart_product UNIQUE (cartId, productId);
 
+CREATE TABLE wishlist (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    productid INT NOT NULL,
+    userid INT NOT NULL,
+    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_product FOREIGN KEY (productid) REFERENCES product(productid),
+    CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid)
+);
+

@@ -51,7 +51,11 @@ class Postgres {
 
     async executeQueryFromFile(filePath: string): Promise<QueryResult<QueryResultRow>> {
         const query = await fs.readFile(filePath, "utf-8");
-        return this.execute(query, []);
+        try {
+            return this.execute(query, []);
+        } catch (err) {
+            throw err;
+        }
     }
 }
 

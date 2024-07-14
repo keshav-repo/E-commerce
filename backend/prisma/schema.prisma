@@ -20,6 +20,7 @@ model product {
   updatedat       DateTime?   @default(now()) @db.Timestamp(6)
   gender          String?     @db.VarChar(30)
   cartitems       cartitems[]
+  wishlists       wishlist[]
 }
 
 model cartitems {
@@ -50,11 +51,25 @@ model carts {
 }
 
 model users {
-  userid       Int     @id @default(autoincrement())
-  username     String  @db.VarChar(100)
-  password     String? @db.VarChar(100)
-  email        String? @unique @db.VarChar(100)
-  name         String? @db.VarChar(100)
+  userid       Int        @id @default(autoincrement())
+  username     String     @db.VarChar(100)
+  password     String?    @db.VarChar(100)
+  email        String?    @unique @db.VarChar(100)
+  name         String?    @db.VarChar(100)
   profilephoto String?
   carts        carts[]
+  wishlist     wishlist[]
+}
+
+model wishlist {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  image     String    @db.VarChar(255)
+  price     Decimal   @db.Decimal(10, 2)
+  productid Int
+  userid    Int
+  createdat DateTime? @default(now()) @db.Timestamp(6)
+  updatedat DateTime? @default(now()) @db.Timestamp(6)
+  product   product   @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction, map: "fk_product")
+  user      users     @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
 }

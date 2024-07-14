@@ -17,7 +17,7 @@ async function main() {
         }
     } catch (err) {
         console.log('error creating ecommerce db', err)
-        process.exit(1);
+        // process.exit(1);
     }
 
     const dbName = process.env.POSTGRES_DB_ECOMM;
@@ -44,7 +44,7 @@ async function main() {
     } catch (err) {
         console.error('error creating schema');
         console.error(err);
-        process.exit(1);
+        //  process.exit(1);
     }
 
     try {

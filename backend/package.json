@@ -7,7 +7,9 @@
     "build": "npx tsc",
     "start": "node dist/index.js",
     "dev": "nodemon -r dotenv/config src/server.ts dotenv_config_path=.env.development",
-    "introspect:dev": "dotenv -e .env.development -- npx prisma introspect"
+    "introspect:dev": "dotenv -e .env.development -- npx prisma introspect",
+    "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev --name init",
+    "generate:dev": "dotenv -e .env.development -- npx prisma generate"
   },
   "author": "",
   "license": "ISC",
