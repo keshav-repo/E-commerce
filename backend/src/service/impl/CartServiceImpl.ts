@@ -20,7 +20,7 @@ class CartServiceImpl implements CartService {
             const user: User = await this.userService.findUser(userName);
 
             const userId: number = parseInt(user.userId!);
-            this.cartRepo.addToCart(userId, cartRequest.productId, cartRequest.quantity);
+            this.cartRepo.addToCart(userId, cartRequest);
         } catch (err) {
             L.error(err);
             throw new Error("Internal error adding to cart");

@@ -2,6 +2,11 @@ import { CartRepo } from "../CartRepo";
 import L from "../../helper/logger";
 import { PrismaClient, cartitems } from "@prisma/client";
 import CartItem from "../../model/cart";
+import { CartRequest } from "../../request/CartRequest";
+import { CONSTANTS } from "../../config";
+import { Query } from "pg";
+import { BadRequestError } from "../../error/BadRequestError";
+import { ResponseTypes } from "../../config/ResponseTypes";
 
 class CartRepoImpl implements CartRepo {
 
@@ -10,8 +15,12 @@ class CartRepoImpl implements CartRepo {
         this.prisma = prisma;
     }
 
-    public addToCart = async (userId: number, productId: number, quantity: number): Promise<void> => {
+    public addToCart = async (userId: number, cartRequest: CartRequest): Promise<void> => {
         let cartId: number;
+
+        const productId: number = cartRequest.productId,
+            quantity: number = cartRequest.quantity,
+            operation: string = cartRequest.operation;
 
         try {
             const cart = await this.prisma.carts.findFirst({
@@ -38,28 +47,51 @@ class CartRepoImpl implements CartRepo {
                 }
             });
             if (!cartItem) {
-                const product = await this.prisma.product.findUnique({
-                    where: { productid: productId }
-                });
-                if (!product) {
-                    throw new Error(`Product with ID ${productId} not found`);
+                if (operation == CONSTANTS.INC_QUANTITY) {
+                    const product = await this.prisma.product.findUnique({
+                        where: { productid: productId }
+                    });
+                    if (!product) {
+                        throw new Error(`Product with ID ${productId} not found`);
+                    }
+                    await this.prisma.cartitems.create({
+                        data: {
+                            cartid: cartId,
+                            productid: productId,
+                            quantity: quantity,
+                            price: product.price
+                        }
+                    });
                 }
-                await this.prisma.cartitems.create({
-                    data: {
-                        cartid: cartId,
-                        productid: productId,
-                        quantity: quantity,
-                        price: product.price
-                    }
-                });
             } else {
-                await this.prisma.cartitems.update({
-                    where: { cartitemid: cartItem.cartitemid },
-                    data: {
-                        quantity: cartItem.quantity + quantity,
-                        updatedat: new Date()
+                if (operation == CONSTANTS.INC_QUANTITY)
+                    await this.prisma.cartitems.update({
+                        where: { cartitemid: cartItem.cartitemid },
+                        data: {
+                            quantity: cartItem.quantity + quantity,
+                            updatedat: new Date()
+                        }
+                    });
+                else {
+                    console.log(cartItem);
+                    if (cartItem.quantity <= 0) {
+                        throw new BadRequestError(ResponseTypes.BAD_REQUEST.message, ResponseTypes.BAD_REQUEST.code);
                     }
-                });
+                    const newQuantity = cartItem.quantity - quantity;
+                    if (newQuantity <= 0) {
+                        await this.prisma.cartitems.delete({
+                            where: { cartitemid: cartItem.cartitemid }
+                        });
+                    } else {
+                        await this.prisma.cartitems.update({
+                            where: { cartitemid: cartItem.cartitemid },
+                            data: {
+                                quantity: newQuantity,
+                                updatedat: new Date()
+                            }
+                        });
+                    }
+                }
             }
         } catch (error) {
             L.error(`Error adding product ${productId} to cart ${cartId} for user ${userId}: ${error}`);

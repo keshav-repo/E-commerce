@@ -7,5 +7,7 @@ export const CONSTANTS = {
     DISPLAY_NAME: 'displayname',
     PRODUCTION_ENV: 'production',
     COMPANY_CRITERIA: 'brands',
-    GENDER_CRITERIS: 'gender'
+    GENDER_CRITERIS: 'gender',
+    DEC_QUANTITY: "DEC",
+    INC_QUANTITY: "INC"
 };

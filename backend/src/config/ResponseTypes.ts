@@ -11,6 +11,7 @@ export const ResponseTypes = {
     USER_WRONG_CRED: { code: "ERR09", message: "username or password is not matching" },
     TOKEN_EXPIRED: { code: "ERR10", message: "Access token expired" },
     TOKEN_INVALID: { code: "ERR11", message: "Invalid token" },
+    INVALID_CART_REQUEST: { code: "ERR12", message: "Invalid cart request" },
 
     // Success Types
     PRODUCT_CREATED: { code: "SUC01", message: "Product created" },
@@ -20,6 +21,7 @@ export const ResponseTypes = {
     TOKEN_CREATED: { code: "SUC05", message: "Token created" },
     LOGOUT_SUCCESS: { code: "SUC06", message: "Logged out successfully" },
     CART_ITEM_FETCHED: { code: "SUC07", message: "Cart item fetched successfully" },
+    ADDED_TO_CART: { code: "SUC07", message: "Items added/modified to cart" },
 
 } as const;
 
