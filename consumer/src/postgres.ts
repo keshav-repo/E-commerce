@@ -1,21 +1,25 @@
+import dotenv from "dotenv";
+dotenv.config();
+import fs from "fs/promises";
+
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 
-const POSTGRES_DB_HOST = 'localhost',
-    POSTGRES_DB_PORT = 5432,
-    POSTGRES_DB_USER = 'postgres',
-    POSTGRES_DB_PASSWORD = 'mysecretpassword',
-    POSTGRES_DB_NAME = 'ecommerce';
+const POSTGRES_DB_HOST = process.env.POSTGRES_DB_HOST;
+const POSTGRES_DB_PORT = Number(process.env.POSTGRES_DB_PORT);
+const POSTGRES_DB_USER = process.env.POSTGRES_DB_USER;
+const POSTGRES_DB_PASSWORD = process.env.POSTGRES_DB_PASSWORD;
+const POSTGRES_DB_NAME = process.env.POSTGRES_DB_NAME;
 
 class Postgres {
     private pool: Pool;
     private poolClient!: PoolClient;
-    constructor() {
+    constructor(database: string = "") {
         this.pool = new Pool({
             host: POSTGRES_DB_HOST,
             port: POSTGRES_DB_PORT,
             user: POSTGRES_DB_USER,
             password: POSTGRES_DB_PASSWORD,
-            database: POSTGRES_DB_NAME,
+            database: database || POSTGRES_DB_NAME,
         });
     }
     public connect = async () => {
@@ -36,6 +40,18 @@ class Postgres {
             console.error("error executing query", err);
             throw err;
         }
+    }
+
+    async disconnect() {
+        if (this.poolClient) {
+            await this.poolClient.release();
+        }
+        await this.pool.end();
+    }
+
+    async executeQueryFromFile(filePath: string): Promise<QueryResult<QueryResultRow>> {
+        const query = await fs.readFile(filePath, "utf-8");
+        return this.execute(query, []);
     }
 }
 

@@ -6,13 +6,15 @@
   "scripts": {
     "start": "ts-node src/consume.ts",
     "build": "tsc",
-    "seedEs": "ts-node src/seedEs.ts"
+    "seedEs": "ts-node src/seedEs.ts",
+    "seedRds": "ts-node src/seedRds.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@elastic/elasticsearch": "^8.14.0",
+    "dotenv": "^16.4.5",
     "elasticsearch": "^16.7.3",
     "kafkajs": "^2.2.4",
     "pg": "^8.12.0"

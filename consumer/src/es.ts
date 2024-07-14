@@ -13,6 +13,47 @@ const es: Client = new Client({
     }
 });
 
+const createProductIndex = async () => {
+    try {
+        const response = await es.indices.create({
+            index: 'product',
+            body: {
+                mappings: {
+                    properties: {
+                        productId: { type: 'integer' },
+                        name: { type: 'text' },
+                        price: { type: 'float' },
+                        category: { type: 'keyword' },
+                        company: { type: 'keyword' },
+                        gender: { type: 'keyword' },
+                        images: { type: 'keyword' },
+                        additionalInfo: {
+                            properties: {
+                                specifications: {
+                                    type: 'nested',
+                                    properties: {
+                                        key: { type: 'keyword' },
+                                        value: { type: 'keyword' }
+                                    }
+                                }
+                            }
+                        },
+                        description: { type: 'keyword' }
+                    }
+                }
+            }
+        });
+
+        console.log('Index created:', response);
+    } catch (error: any) {
+        if (error.meta && error.meta.body && error.meta.body.error && error.meta.body.error.type === 'resource_already_exists_exception') {
+            console.log('Index already exists');
+        } else {
+            console.error('Error creating index:', error);
+        }
+    }
+};
+
 const insertDocument = async <T>(index: string, id: string, document: T) => {
     try {
         const response: WriteResponseBase = await es.index({
@@ -26,4 +67,4 @@ const insertDocument = async <T>(index: string, id: string, document: T) => {
     }
 }
 
-export { es, insertDocument };
+export { es, insertDocument, createProductIndex };
