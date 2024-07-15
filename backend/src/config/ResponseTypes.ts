@@ -14,6 +14,7 @@ export const ResponseTypes = {
     INVALID_CART_REQUEST: { code: "ERR12", message: "Invalid cart request" },
     PRODUCT_ALREADY_IN_WISHLIST: { code: "ERR13", message: "Product already present in wishlist" },
     PRODUCT_NOT_FOUND_IN_WISHLIST: { code: "ERR14", message: "Product not found in wishlist" },
+    CART_ITEM_NOT_FOUND: { code: "ERR15", message: "Cart Item not found" },
 
     // Success Types
     PRODUCT_CREATED: { code: "SUC01", message: "Product created" },
@@ -26,6 +27,7 @@ export const ResponseTypes = {
     ADDED_TO_CART: { code: "SUC07", message: "Items added/modified to cart" },
     WISHLIST_CREATED: { code: "SUC08", message: "Wish List created successfully" },
     PRODUCT_REMOVED_WISHLIST: { code: "SUC09", message: "Product removed successfully from wishlist" },
+    CART_ITEM_DELETED: { code: "SUC10", message: "Cart item deleted" },
 
 } as const;
 

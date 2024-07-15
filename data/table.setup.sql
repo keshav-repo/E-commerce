@@ -43,12 +43,14 @@ CREATE TABLE cartItems (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cartId) REFERENCES carts(cartId) ON DELETE CASCADE,
-    FOREIGN KEY (productId) REFERENCES product(productId)
+    FOREIGN KEY (productId) REFERENCES product(productId),
+    UNIQUE (cartId, productId)
 );
 
 CREATE INDEX idx_cart_user ON carts(cartId);
 CREATE INDEX idx_cart_items_cart ON cartItems(cartId);
 CREATE INDEX idx_cart_items_product ON cartItems(productId);
+
 
 ALTER TABLE cartitems ADD CONSTRAINT unique_cart_product UNIQUE (cartId, productId);
 

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import L from "../helper/logger";
 import { CartRequest } from "../request/CartRequest";
 import { BadRequestError } from "../error/BadRequestError";
 import { ResponseTypes } from "../config/ResponseTypes";
@@ -42,6 +41,18 @@ class CartController {
             res.json(new SuccessResponse(ResponseTypes.CART_ITEM_FETCHED, cartItems));
         } catch (err) {
             next(err)
+        }
+    }
+
+    public deleteCartItem = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const currUser: string = (req as any).currUser.username;
+        const pid: string = req.query.productId as string;
+        const productId: number = parseInt(pid);
+        try {
+            await this.cartService.deleteCartItem(currUser, productId);
+            res.json(new SuccessResponse(ResponseTypes.CART_ITEM_DELETED));
+        } catch (err) {
+            next(err);
         }
     }
 }

@@ -34,9 +34,7 @@ model cartitems {
   carts      carts     @relation(fields: [cartid], references: [cartid], onDelete: Cascade, onUpdate: NoAction)
   product    product   @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
 
-  @@unique([cartid, productid], map: "unique_cart_product")
-  @@index([cartid], map: "idx_cart_items_cart")
-  @@index([productid], map: "idx_cart_items_product")
+  @@unique([cartid, productid])
 }
 
 model carts {

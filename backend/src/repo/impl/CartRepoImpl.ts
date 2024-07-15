@@ -7,6 +7,10 @@ import { CONSTANTS } from "../../config";
 import { Query } from "pg";
 import { BadRequestError } from "../../error/BadRequestError";
 import { ResponseTypes } from "../../config/ResponseTypes";
+import { use } from "passport";
+import { error } from "console";
+import { InternalServerError } from "../../error/InternalServerError";
+import { BaseError } from "../../error/BaseError";
 
 class CartRepoImpl implements CartRepo {
 
@@ -63,6 +67,8 @@ class CartRepoImpl implements CartRepo {
                             price: product.price
                         }
                     });
+                } else {
+                    throw new BadRequestError(ResponseTypes.CART_ITEM_NOT_FOUND.message, ResponseTypes.CART_ITEM_NOT_FOUND.code);
                 }
             } else {
                 if (operation == CONSTANTS.INC_QUANTITY)
@@ -95,6 +101,8 @@ class CartRepoImpl implements CartRepo {
                 }
             }
         } catch (error) {
+            if (error instanceof BaseError)
+                throw error;
             L.error(`Error adding product ${productId} to cart ${cartId} for user ${userId}: ${error}`);
             throw new Error(`Failed to add product ${productId} to cart for user ${userId}`);
         }
@@ -137,6 +145,43 @@ class CartRepoImpl implements CartRepo {
             throw new Error(`Failed to fetch cart details for user ${userId}`);
         }
     }
+
+    public deleteCartItem = async (userId: number, productId: number): Promise<void> => {
+        try {
+            const cart = await this.prisma.carts.findFirst({
+                where: {
+                    userid: userId,
+                }
+            });
+            if (!cart) {
+                L.error(`fetal error userId: ${userId} not found error: ${error}`);
+                throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+            }
+            const cartItem = await this.prisma.cartitems.findFirst({
+                where: {
+                    productid: productId,
+                    cartid: cart.cartid
+                }
+            });
+            if (!cartItem) {
+                throw new BadRequestError(ResponseTypes.CART_ITEM_NOT_FOUND.message, ResponseTypes.CART_ITEM_NOT_FOUND.code);
+            }
+            await this.prisma.cartitems.delete({
+                where:
+                {
+                    cartid_productid: {
+                        cartid: cart.cartid,
+                        productid: productId
+                    }
+                }
+            })
+        } catch (error) {
+            L.error(`error deleting cartite with productId: ${productId}, userId: ${userId} error: ${error}`)
+            if (error instanceof BaseError)
+                throw error;
+            throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+        }
+    };
 }
 
 export default CartRepoImpl;
