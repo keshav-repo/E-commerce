@@ -1,21 +1,7 @@
 import React from 'react';
 import Address from './Address';
 import CartItem from './CartItem';
-
-interface CartPageProps {
-    address: {
-        name: string;
-        postalCode: string;
-        address: string;
-    };
-    cartItems: {
-        name: string;
-        quantity: number;
-        price: number;
-        image: string;
-        productId: number;
-    }[];
-}
+import { CartPageProps } from '@/app/lib/definitions';
 
 const CartDetails: React.FC<CartPageProps> = ({ address, cartItems }) => {
     return (

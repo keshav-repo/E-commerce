@@ -1,14 +1,5 @@
+import { CartItemProps } from '@/app/lib/definitions';
 import React from 'react';
-
-interface CartItemProps {
-    item: {
-        name: string;
-        quantity: number;
-        price: number;
-        image: string;
-        productId: number;
-    };
-}
 
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
     return (

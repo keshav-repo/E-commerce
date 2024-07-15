@@ -1,3 +1,5 @@
+import { Address } from "cluster";
+
 export type Product = {
   productId: number;
   name: string;
@@ -80,9 +82,33 @@ export interface ProductListSectionProps {
   q?: string;
 }
 
-
 export interface ProductDetailsSectionProps {
   specifications: {
     [key: string]: string;
   }
 }
+
+export interface AddressProps {
+  address: string;
+  name: string;
+  postalCode: string;
+}
+
+export interface CartItem {
+  name: string;
+  quantity: number;
+  price: number;
+  image: string;
+  productId: number;
+}
+
+export interface CartItemProps {
+  item: CartItem
+}
+
+export interface CartPageProps {
+  address: AddressProps
+  cartItems: CartItem[];
+}
+
+

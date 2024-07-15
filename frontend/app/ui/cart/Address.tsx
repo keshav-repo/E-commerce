@@ -1,10 +1,5 @@
+import { AddressProps } from '@/app/lib/definitions';
 import React from 'react';
-
-interface AddressProps {
-    address: string;
-    name: string;
-    postalCode: string;
-}
 
 const Address: React.FC<AddressProps> = ({ address, name, postalCode }) => {
     return (
