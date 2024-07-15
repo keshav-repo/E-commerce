@@ -6,6 +6,6 @@ export default interface CartItem {
     name: string,
     image: string,
     quantity: number,
-    price: Decimal,
+    price: number,
     productId: number,
 }

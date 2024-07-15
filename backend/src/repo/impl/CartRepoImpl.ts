@@ -132,7 +132,7 @@ class CartRepoImpl implements CartRepo {
                     name: item.product.name,
                     image: images[0],
                     quantity: item.quantity,
-                    price: item.price,
+                    price: item.price.toNumber(),
                     productId: item.productid
                 };
             });

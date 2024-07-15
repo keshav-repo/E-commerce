@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
               className="flex flex-col items-center text-gray-700 hover:text-gray-900"
             >
               <AiOutlineShoppingCart className="text-2xl" />
-              <span className="text-sm">Bag</span>
+              <span className="text-sm">Cart</span>
             </Link>
           </div>
         </div>
