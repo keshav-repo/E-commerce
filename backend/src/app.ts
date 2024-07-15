@@ -8,7 +8,10 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import { ping } from "./db/es";
 import { pingDb } from "./db";
+import { specs, swaggerUi } from "./middleware";
 
+import YAML from 'yamljs';
+import path from 'path';
 
 db.connect();
 connectKafka();
@@ -37,5 +40,9 @@ app.use(passport.session());
 routes(app);
 
 app.use(errorHandler);
+
+const swaggerDocument = YAML.load(path.join(__dirname, '../docs/openapi.yaml'));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 export default app;

@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Swagger Express API
+  version: 1.0.0
+  description: A simple Express API with Swagger documentation
+components:
+  schemas:
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: integer
+        quantity:
+          type: integer
+        price:
+          type: number
+          format: float
+    CartResponse:
+      type: object
+      properties:
+        successCode:
+          type: string
+          example: SUC07
+        cartId:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+  schemas:
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: integer
+        quantity:
+          type: integer
+        price:
+          type: number
+          format: float
+    CartResponse:
+      type: object
+      properties:
+        successCode:
+          type: string
+          example: SUC07
+        cartId:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+paths:
+  /api/cart:
+    get:
+      summary: Fetch cart for a user
+      parameters:
+        - in: cookie
+          name: token
+          required: true
+          schema:
+            type: string
+          description: JWT token for authentication
+      responses:
+        200:
+          description: Successfully fetched the user's cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        401:
+          description: Unauthorized, missing or invalid token
+        500:
+          description: Internal server error
