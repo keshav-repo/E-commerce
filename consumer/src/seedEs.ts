@@ -26,7 +26,7 @@ async function main() {
 
     for (let row of rows.rows) {
         const product: Product = {
-            productId: row.product_id,
+            productId: row.productid,
             name: row.name,
             price: parseInt(row.price),
             category: row.category,

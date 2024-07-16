@@ -13,6 +13,7 @@ export interface ProductSearchDto {
     name: string;
     price: number;
     company: string;
+    images: string[]
 }
 
 export interface FilterItem {

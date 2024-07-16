@@ -15,6 +15,8 @@ const ProductListSection: React.FC<ProductListSectionProps> = ({
   q
 }) => {
 
+  console.log(products);
+
   const router = useRouter();
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPage) {
