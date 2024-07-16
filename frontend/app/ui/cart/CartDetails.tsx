@@ -1,17 +1,78 @@
-import React from 'react';
-import Address from './Address';
-import CartItem from './CartItem';
-import { CartPageProps } from '@/app/lib/definitions';
+'use client';
 
-const CartDetails: React.FC<CartPageProps> = ({ address, cartItems }) => {
+import React, { useEffect, useState } from 'react';
+import Address from './Address';
+import CartItemEle from './CartItem';
+import { CartItem } from '@/app/lib/definitions';
+import Cookies from 'js-cookie';
+
+const address = {
+    name: 'John Doe',
+    postalCode: '56010',
+    address: '121,50, Bangalore, Bengaluru'
+};
+
+const CartDetails: React.FC = () => {
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [message, setMessage] = useState<{ text: string, type: 'error' | 'info' }>({ text: '', type: 'info' });
+
+    const fetchCartItems = async () => {
+        try {
+            const response: Response = await fetch('/api/cart', {
+                credentials: 'include',
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setCartItems(data.data);
+            }
+            else {
+                setMessage({ text: 'Some temporary issue, please report this to email: admin@ecommerce.com', type: 'error' });
+            }
+        } catch (err) {
+            setMessage({ text: 'An error occurred while fetching cart items.', type: 'error' });
+        }
+    }
+
+    const deleteCartItem = async (productId: number) => {
+        try {
+            const response = await fetch(`/api/cart?productId=${productId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (data.successCode == 'SUC10') {
+                setCartItems(prevItems => prevItems.filter(item => item.productId != productId));
+            } else {
+                setMessage({ text: 'Failed to delete item.', type: 'error' });
+            }
+        } catch (err) {
+            console.log(`error in deleting cart item`);
+            setMessage({ text: 'An error occurred while deleting cart item.', type: 'error' });
+        }
+    }
+
+    useEffect(() => {
+        const displayname: string | undefined = Cookies.get('displayname');
+        if (!displayname) {
+            setMessage({ text: 'Please log in to check your cart', type: 'error' });
+        } else {
+            fetchCartItems();
+        }
+    }, []);
+
     return (
         <div className="bg-gray-100 p-4 sm:p-6">
+            {message.text && (
+                <div className={`p-4 mb-4 text-sm rounded ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
+                    {message.text}
+                </div>
+            )}
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden flex flex-col lg:flex-row">
                 <div className="w-full lg:w-[60%] p-4 sm:p-6">
                     <Address address={address.address} name={address.name} postalCode={address.postalCode} />
                     <div className="mt-4">
                         {cartItems.map(item => (
-                            <CartItem key={item.productId} item={item} />
+                            <CartItemEle key={item.productId} item={item} onDelete={deleteCartItem} />
                         ))}
                     </div>
                 </div>
@@ -32,7 +93,7 @@ const CartDetails: React.FC<CartPageProps> = ({ address, cartItems }) => {
                         </div>
                         <div className="flex justify-between mt-2 font-bold">
                             <span>Total Amount</span>
-                            <span>₹{cartItems.reduce((total, item) => total + item.price, 0) + 20}</span>
+                            <span>₹{cartItems.reduce((total, item) => total + item.price, 0)}</span>
                         </div>
                         <button className="mt-4 bg-blue-400 text-white w-full py-2 rounded">PLACE ORDER</button>
                     </div>

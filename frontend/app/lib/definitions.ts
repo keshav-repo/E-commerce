@@ -103,7 +103,8 @@ export interface CartItem {
 }
 
 export interface CartItemProps {
-  item: CartItem
+  item: CartItem,
+  onDelete: (id: number) => void;
 }
 
 export interface CartPageProps {

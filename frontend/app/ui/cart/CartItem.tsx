@@ -1,7 +1,15 @@
+'use client';
+
 import { CartItemProps } from '@/app/lib/definitions';
 import React from 'react';
 
-const CartItem: React.FC<CartItemProps> = ({ item }) => {
+const CartItemEle: React.FC<CartItemProps> = ({ item, onDelete }) => {
+
+    const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        onDelete(item.productId);
+    }
+
     return (
         <div className="flex items-start border-b pb-4">
             <img src={item.image} alt="Product Image" className="w-20 h-20 rounded-md" />
@@ -14,9 +22,9 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
                     <span className="text-black-800 font-semibold px-4">₹{item.price}</span>
                 </div>
             </div>
-            <button className="text-gray-600 ml-auto">✖</button>
+            <button className="text-gray-600 ml-auto" onClick={(e) => handleDelete(e)}>✖</button>
         </div>
     );
 };
 
-export default CartItem;
+export default CartItemEle;

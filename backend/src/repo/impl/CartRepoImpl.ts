@@ -114,9 +114,8 @@ class CartRepoImpl implements CartRepo {
             });
 
             if (!cart) {
-                throw new Error(`No cart found for user with ID ${userId}`);
+                return [] as CartItem[];
             }
-
             const cartDetails = await this.prisma.cartitems.findMany({
                 where: { cartid: cart.cartid },
                 include: {

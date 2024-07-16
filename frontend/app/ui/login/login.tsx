@@ -38,7 +38,7 @@ const LoginModule: React.FC = () => {
   };
 
   const handleSignupRedirect = async () => {
-    router.push('/signup'); // Change '/signup' to the correct path of your signup page
+    router.push('/signup');
   };
 
   const handleGoogleLogin = async (e: any) => {
@@ -46,8 +46,6 @@ const LoginModule: React.FC = () => {
     window.location.href = `http://localhost:8080/api/auth/google?returnTo=${encodeURIComponent(
       currentUrl,
     )}`;
-
-    // window.location.href = 'http://localhost:8080/api/auth/google';
   };
 
   return (
