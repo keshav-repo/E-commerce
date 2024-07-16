@@ -74,6 +74,7 @@ export interface ProductDetailsProps {
 
 export interface AddToCartProp {
   addToCart: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  addToWishlist: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface ProductCardProps {
