@@ -68,6 +68,14 @@ export interface FilterSectionProps {
   filters: SearchFilter[];
 }
 
+export interface ProductDetailsProps {
+  product: Product
+}
+
+export interface AddToCartProp {
+  addToCart: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
 export interface ProductCardProps {
   product: SearcProducthData;
 }

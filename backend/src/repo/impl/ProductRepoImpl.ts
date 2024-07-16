@@ -20,7 +20,7 @@ class ProductRepoImpl implements ProductRepo {
             if (res.rows.length > 0) {
                 const row = res.rows[0];
                 const productEntity: ProductEntity = {
-                    productId: row.product_id,
+                    productId: row.productid,
                     name: row.name,
                     description: row.description,
                     price: row.price,
