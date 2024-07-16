@@ -51,6 +51,42 @@ const CartDetails: React.FC = () => {
         }
     }
 
+    const changeCartItemQuantity = async (productId: number, quantity: number) => {
+        try {
+            const cartItemToChange = cartItems.find(item => item.productId === productId);
+            if (cartItemToChange) {
+                if (cartItemToChange.quantity !== quantity) {
+                    const operation = cartItemToChange.quantity < quantity ? "INC" : "DEC";
+                    const cartReq = {
+                        productId: productId,
+                        quantity: Math.abs(cartItemToChange.quantity - quantity),
+                        operation: operation
+                    }
+                    const response = await fetch(`/api/cart`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(cartReq),
+                    });
+
+                    const data = await response.json();
+                    if (data.successCode === 'SUC07') {
+                        setCartItems(prevItems => prevItems.map(item =>
+                            item.productId === productId ? { ...item, quantity } : item
+                        ));
+                    } else {
+                        setMessage({ text: 'Failed to update item quantity.', type: 'error' });
+                    }
+                }
+            }
+        } catch (err) {
+            console.log('Error in updating cart item quantity');
+            setMessage({ text: 'An error occurred while updating cart item quantity.', type: 'error' });
+        }
+    }
+
     useEffect(() => {
         const displayname: string | undefined = Cookies.get('displayname');
         if (!displayname) {
@@ -72,7 +108,7 @@ const CartDetails: React.FC = () => {
                     <Address address={address.address} name={address.name} postalCode={address.postalCode} />
                     <div className="mt-4">
                         {cartItems.map(item => (
-                            <CartItemEle key={item.productId} item={item} onDelete={deleteCartItem} />
+                            <CartItemEle key={item.productId} item={item} onDelete={deleteCartItem} onQuantityChange={changeCartItemQuantity} />
                         ))}
                     </div>
                 </div>
@@ -81,7 +117,7 @@ const CartDetails: React.FC = () => {
                         <p className="font-semibold">PRICE DETAILS ({cartItems.length} Items)</p>
                         <div className="flex justify-between mt-2">
                             <span>Total MRP</span>
-                            <span>₹{cartItems.reduce((total, item) => total + item.price, 0)}</span>
+                            <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span>
                         </div>
                         <div className="flex justify-between mt-2">
                             <span>Discount on MRP</span>
@@ -93,7 +129,7 @@ const CartDetails: React.FC = () => {
                         </div>
                         <div className="flex justify-between mt-2 font-bold">
                             <span>Total Amount</span>
-                            <span>₹{cartItems.reduce((total, item) => total + item.price, 0)}</span>
+                            <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span>
                         </div>
                         <button className="mt-4 bg-blue-400 text-white w-full py-2 rounded">PLACE ORDER</button>
                     </div>

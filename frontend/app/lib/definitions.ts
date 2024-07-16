@@ -105,6 +105,7 @@ export interface CartItem {
 export interface CartItemProps {
   item: CartItem,
   onDelete: (id: number) => void;
+  onQuantityChange: (id: number, quantity: number) => void;
 }
 
 export interface CartPageProps {
