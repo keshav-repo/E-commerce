@@ -5,6 +5,9 @@ import Address from './Address';
 import CartItemEle from './CartItem';
 import { CartItem } from '@/app/lib/definitions';
 import Cookies from 'js-cookie';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const address = {
     name: 'John Doe',
@@ -15,6 +18,7 @@ const address = {
 const CartDetails: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [message, setMessage] = useState<{ text: string, type: 'error' | 'info' }>({ text: '', type: 'info' });
+    const [loading, setLoading] = useState(false);
 
     const fetchCartItems = async () => {
         try {
@@ -87,6 +91,32 @@ const CartDetails: React.FC = () => {
         }
     }
 
+    const handleCheckout = async () => {
+        setLoading(true);
+        const response = await fetch('/api/payment/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                items: [
+                    { name: 'Product 1', price: 1000, quantity: 1 }, // Example item
+                ],
+            }),
+        });
+
+        const { id } = await response.json();
+        const stripe = await stripePromise;
+        if (stripe) {
+            try {
+                await stripe.redirectToCheckout({ sessionId: id });
+            } catch (err) {
+                console.log(`error in payment redirect`, err);
+            }
+        }
+        setLoading(false);
+    };
+
     useEffect(() => {
         const displayname: string | undefined = Cookies.get('displayname');
         if (!displayname) {
@@ -131,7 +161,10 @@ const CartDetails: React.FC = () => {
                             <span>Total Amount</span>
                             <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span>
                         </div>
-                        <button className="mt-4 bg-blue-400 text-white w-full py-2 rounded">PLACE ORDER</button>
+                        <button className="mt-4 bg-blue-400 text-white w-full py-2 rounded"
+                            onClick={handleCheckout} disabled={loading}>
+                            {loading ? 'Loading...' : 'Checkout'}
+                        </button>
                     </div>
                     <div className="bg-white shadow-md rounded px-4 pb-4 mb-4">
                         <p className="font-semibold">COUPONS</p>
