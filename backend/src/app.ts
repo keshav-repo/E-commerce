@@ -24,6 +24,11 @@ pingDb();
 const app: Express = express();
 app.use(cors());
 
+// this is seperated fro other router as we don't need to parse raw body in this case
+import { paymentController } from "./controller";
+app.post('/api/payment/webhook', express.raw({ type: 'application/json' }), paymentController.stripeWebhook)
+
+
 app.use(cookieParser());
 app.use(express.json());
 

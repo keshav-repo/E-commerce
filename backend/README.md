@@ -58,3 +58,7 @@ npm run introspect:dev
 
 
 ```
+
+### Credit card for Test payment
+
+4242424242424242
