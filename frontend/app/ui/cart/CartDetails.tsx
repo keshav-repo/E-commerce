@@ -61,6 +61,7 @@ const CartDetails: React.FC = () => {
             if (cartItemToChange) {
                 if (cartItemToChange.quantity !== quantity) {
                     const operation = cartItemToChange.quantity < quantity ? "INC" : "DEC";
+
                     const cartReq = {
                         productId: productId,
                         quantity: Math.abs(cartItemToChange.quantity - quantity),
@@ -91,25 +92,61 @@ const CartDetails: React.FC = () => {
         }
     }
 
-    const handleCheckout = async () => {
+    const createOrder = async () => {
         setLoading(true);
-        const response = await fetch('/api/payment/checkout', {
+        const payloadItems = [];
+        let totalPrice = 0;
+        for (let cartItem of cartItems) {
+            payloadItems.push({
+                productid: cartItem.productId,
+                quantity: cartItem.quantity,
+                unitPrice: cartItem.price
+            })
+            totalPrice = totalPrice + cartItem.quantity * cartItem.price;
+        }
+
+        const response = await fetch('/api/payment/order', {
+            credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                items: [
-                    { name: 'Product 1', price: 1000, quantity: 1 }, // Example item
-                ],
+                items: payloadItems,
+                totalPrice: totalPrice
+            }),
+        });
+        try {
+            if (response.ok) {
+
+                const data = await response.json();
+                const orderId = data.data.orderId;
+
+                await handleCheckout(orderId);
+            }
+        } catch (err) {
+            console.log(`error in creating order id`);
+        }
+    };
+
+    const handleCheckout = async (orderId: string) => {
+        setLoading(true);
+        const response = await fetch('/api/payment/checkout', {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderId
             }),
         });
 
-        const { id } = await response.json();
+        const data = await response.json();
         const stripe = await stripePromise;
         if (stripe) {
             try {
-                await stripe.redirectToCheckout({ sessionId: id });
+                await stripe.redirectToCheckout({ sessionId: data.data.id });
             } catch (err) {
                 console.log(`error in payment redirect`, err);
             }
@@ -162,7 +199,7 @@ const CartDetails: React.FC = () => {
                             <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span>
                         </div>
                         <button className="mt-4 bg-blue-400 text-white w-full py-2 rounded"
-                            onClick={handleCheckout} disabled={loading}>
+                            onClick={createOrder} disabled={loading}>
                             {loading ? 'Loading...' : 'Checkout'}
                         </button>
                     </div>

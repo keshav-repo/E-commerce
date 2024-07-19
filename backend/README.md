@@ -62,3 +62,9 @@ npm run introspect:dev
 ### Credit card for Test payment
 
 4242424242424242
+
+### Trigger Stripe webhook call from localhost
+
+```shell
+stripe listen --forward-to localhost:8080/api/payment/webhook
+```

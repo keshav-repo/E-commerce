@@ -9,5 +9,6 @@ export const CONSTANTS = {
     COMPANY_CRITERIA: 'brands',
     GENDER_CRITERIS: 'gender',
     DEC_QUANTITY: "DEC",
-    INC_QUANTITY: "INC"
+    INC_QUANTITY: "INC",
+    STRIPE_PAYMENT_MODE: "payment"
 };

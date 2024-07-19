@@ -7,9 +7,11 @@ import PaymentService from "../service/PaymentService";
 import { OrderResponse } from "../request/OrderResponse";
 import { SuccessResponse } from "../response/SuccessResponse";
 import { ResponseTypes } from "../config/ResponseTypes";
+import CheckoutRequest from "../request/CheckoutRequest";
 
 class PaymentController {
     private paymentService: PaymentService;
+
     constructor(paymentService: PaymentService) {
         this.paymentService = paymentService;
     }
@@ -26,29 +28,15 @@ class PaymentController {
         }
     }
 
-    public checkout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const session = await stripe.checkout.sessions.create({
-            success_url: "http://localhost:3000/success",
-            cancel_url: "http://localhost:3000/cancel",
-            line_items: [
-                {
-                    price: 'price_1PdvGNILFzdKPFQqM7frzAwB',
-                    quantity: 1,
-                },
-            ],
-            mode: 'payment',
-            customer: 'cus_QUvRYtRXxA4PLx',
-            payment_intent_data: {
-                metadata: {
-                    productid: '209',
-                    quantity: '2'
-                }
-            }
-        });
-
-        L.info('session id is ', session.id);
-
-        res.json({ id: session.id });
+    public checkout = async (req: Request<{}, {}, CheckoutRequest>, res: Response, next: NextFunction): Promise<void> => {
+        const checkoutRequest: CheckoutRequest = req.body;
+        try {
+            const currUser: string = (req as any).currUser.username;
+            const sessionResponse = await this.paymentService.createSession(currUser, checkoutRequest);
+            res.status(201).json(new SuccessResponse(ResponseTypes.SESSION_CREATED, sessionResponse));
+        } catch (err) {
+            next(err);
+        }
     }
 
     public stripeWebhook = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -75,7 +63,7 @@ class PaymentController {
             case 'payment_intent.succeeded':
                 const paymentIntent = event.data.object;
 
-                const { productid, quantity } = paymentIntent.metadata;
+                const { orderId } = paymentIntent.metadata;
 
                 const paymentData = {
                     payment_intent_id: paymentIntent.id,
@@ -86,12 +74,12 @@ class PaymentController {
                     status: paymentIntent.status,
                     createdTime: paymentIntent.created,
                     completedTime: paymentIntent.status === 'succeeded' ? Date.now() : null,
-                    productid: productid,
-                    quantity: quantity
                 };
 
                 L.info('payment data is');
                 L.info(JSON.stringify(paymentData));
+
+                await this.paymentService.updateOrderToPaid(parseInt(orderId));
 
                 break;
             case 'payment_intent.payment_failed':

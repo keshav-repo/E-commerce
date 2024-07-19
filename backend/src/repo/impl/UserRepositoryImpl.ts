@@ -19,6 +19,7 @@ class UserRepositoryImpl implements UserRepository {
                     userId: String(result.rows[0].userid),
                     username: result.rows[0].username,
                     password: result.rows[0].password,
+                    email: result.rows[0].email
                 };
                 return user;
             } else {

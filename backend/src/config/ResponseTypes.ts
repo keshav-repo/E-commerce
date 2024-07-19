@@ -30,6 +30,7 @@ export const ResponseTypes = {
     PRODUCT_REMOVED_WISHLIST: { code: "SUC09", message: "Product removed successfully from wishlist" },
     CART_ITEM_DELETED: { code: "SUC10", message: "Cart item deleted" },
     ORDER_CREATED: { code: "SUC11", message: "Order created" },
+    SESSION_CREATED: { code: "SUC12", message: "Order created" },
 
 } as const;
 

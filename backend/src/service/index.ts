@@ -22,7 +22,7 @@ const productService: ProductService = new ProductServiceImpl(productRepo),
     cartService: CartService = new CartServiceImpl(cartRepo, userService),
     wishListService: WishListService = new WishListServiceImpl(wishListRepo, userService),
     stripeService: StripeService = new StripeServiceImpl(stripe),
-    paymentService: PaymentService = new PaymentServiceImpl(orderRepo, userService);
+    paymentService: PaymentService = new PaymentServiceImpl(orderRepo, userService, stripeService);
 
 export {
     productService,
