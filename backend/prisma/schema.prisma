@@ -8,19 +8,20 @@ datasource db {
 }
 
 model product {
-  productid       Int         @id @default(autoincrement())
-  name            String      @db.VarChar(255)
+  productid       Int          @id @default(autoincrement())
+  name            String       @db.VarChar(255)
   description     String?
-  price           Decimal     @db.Decimal(10, 2)
-  category        String      @db.VarChar(100)
-  company         String      @db.VarChar(100)
+  price           Decimal      @db.Decimal(10, 2)
+  category        String       @db.VarChar(100)
+  company         String       @db.VarChar(100)
   images          Json?
   additional_info Json?
-  createdat       DateTime?   @default(now()) @db.Timestamp(6)
-  updatedat       DateTime?   @default(now()) @db.Timestamp(6)
-  gender          String?     @db.VarChar(30)
+  createdat       DateTime?    @default(now()) @db.Timestamp(6)
+  updatedat       DateTime?    @default(now()) @db.Timestamp(6)
+  gender          String?      @db.VarChar(30)
   cartitems       cartitems[]
   wishlists       wishlist[]
+  orderitems      orderitems[]
 }
 
 model cartitems {
@@ -57,6 +58,7 @@ model users {
   profilephoto String?
   carts        carts[]
   wishlist     wishlist[]
+  orders       orders[]
 }
 
 model wishlist {
@@ -67,4 +69,25 @@ model wishlist {
   updatedat DateTime? @default(now()) @db.Timestamp(6)
   product   product   @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction, map: "fk_product")
   user      users     @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+}
+
+model orders {
+  orderid     Int          @id @default(autoincrement())
+  userid      Int
+  totalamount Decimal      @db.Decimal(10, 2)
+  status      String       @db.VarChar(20)
+  createdat   DateTime     @default(now()) @db.Timestamp(6)
+  updatedat   DateTime     @default(now()) @db.Timestamp(6)
+  orderitems  orderitems[]
+  user        users        @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+}
+
+model orderitems {
+  orderitemid Int      @id @default(autoincrement())
+  orderid     Int
+  productid   Int
+  quantity    Int
+  price       Decimal  @db.Decimal(10, 2)
+  order       orders?  @relation(fields: [orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction, map: "fk_orderite")
+  product     product? @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction, map: "fk_product")
 }
