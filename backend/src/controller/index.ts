@@ -1,5 +1,5 @@
 import ProductController from "./productController";
-import { cartService, productService, searchService, userService, wishListService } from "../service";
+import { cartService, paymentService, productService, searchService, userService, wishListService, } from "../service";
 import SearchController from "./searchController";
 import UserController from "./UserController";
 import HomePageController from "./HomePageController";
@@ -13,7 +13,7 @@ const productController: ProductController = new ProductController(productServic
     homePageController: HomePageController = new HomePageController(productService),
     cartController: CartController = new CartController(cartService),
     wishlistController: WishListController = new WishListController(wishListService),
-    paymentController: PaymentController = new PaymentController()
+    paymentController: PaymentController = new PaymentController(paymentService);
 
 export {
     productController, searchController, userController,

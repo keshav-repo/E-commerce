@@ -2,10 +2,30 @@ import { NextFunction, Request, Response } from "express";
 import { stripe } from "../middleware";
 import L from "../helper/logger";
 import Stripe from "stripe";
+import { OrderRequest } from "../request/OrderRequest";
+import PaymentService from "../service/PaymentService";
+import { OrderResponse } from "../request/OrderResponse";
+import { SuccessResponse } from "../response/SuccessResponse";
+import { ResponseTypes } from "../config/ResponseTypes";
 
 class PaymentController {
-    constructor() {
+    private paymentService: PaymentService;
+    constructor(paymentService: PaymentService) {
+        this.paymentService = paymentService;
     }
+
+    public createOrder = async (req: Request<{}, {}, OrderRequest>, res: Response, next: NextFunction): Promise<void> => {
+        const paymentRequest: OrderRequest = req.body;
+
+        try {
+            const currUser: string = (req as any).currUser.username;
+            const orderResponse: OrderResponse = await this.paymentService.createOrder(currUser, paymentRequest);
+            res.status(201).json(new SuccessResponse(ResponseTypes.ORDER_CREATED, orderResponse));
+        } catch (err) {
+            next(err);
+        }
+    }
+
     public checkout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         const session = await stripe.checkout.sessions.create({
             success_url: "http://localhost:3000/success",

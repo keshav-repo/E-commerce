@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { paymentController } from "../controller";
+import { jWTMiddleware } from "../middleware";
 
 const paymentRouter: Router = Router();
 
-// express.raw({type: 'application/json'})
-
+paymentRouter.post("/order", jWTMiddleware.authenticateJWT, paymentController.createOrder);
 paymentRouter.post("/checkout", paymentController.checkout);
-// paymentRouter.post("/webhook", paymentController.stripeWebhook);
 
 export default paymentRouter;

@@ -1,15 +1,13 @@
 -- CREATE DATABASE ecommerce;
-
 -- connect to db
 -- \ c ecommerce
-
 CREATE TABLE users (
     userId SERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
     password VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     name VARCHAR(100),
-    profilePhoto TEXT 
+    profilePhoto TEXT
 );
 
 CREATE TABLE product (
@@ -23,7 +21,7 @@ CREATE TABLE product (
     additional_info JSONB,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	gender varchar(30)
+    gender varchar(30)
 );
 
 CREATE TABLE carts (
@@ -48,11 +46,15 @@ CREATE TABLE cartItems (
 );
 
 CREATE INDEX idx_cart_user ON carts(cartId);
+
 CREATE INDEX idx_cart_items_cart ON cartItems(cartId);
+
 CREATE INDEX idx_cart_items_product ON cartItems(productId);
 
-
-ALTER TABLE cartitems ADD CONSTRAINT unique_cart_product UNIQUE (cartId, productId);
+ALTER TABLE
+    cartitems
+ADD
+    CONSTRAINT unique_cart_product UNIQUE (cartId, productId);
 
 CREATE TABLE wishlist (
     id SERIAL PRIMARY KEY,
@@ -64,3 +66,19 @@ CREATE TABLE wishlist (
     CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid)
 );
 
+CREATE TABLE orders (
+    orderid SERIAL PRIMARY KEY,
+    userid INTEGER not null REFERENCES users(userid),
+    totalamount decimal NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE orderitems (
+    orderitemid SERIAL PRIMARY KEY,
+    orderid INTEGER not null REFERENCES orders(orderid),
+    productid INTEGER not null REFERENCES product(productid),
+    quantity INTEGER NOT NULL,
+    price decimal NOT NULL
+)
