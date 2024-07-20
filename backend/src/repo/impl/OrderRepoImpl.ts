@@ -94,7 +94,8 @@ class OrderRepoImpl implements OrderRepo {
                             createdat: true,
                             status: true
                         }
-                    }
+                    },
+                    orderitemid: true
                 }
             });
             return paidOrderItems;
@@ -140,7 +141,8 @@ class OrderRepoImpl implements OrderRepo {
                             createdat: true,
                             status: true
                         }
-                    }
+                    },
+                    orderitemid: true
                 },
             });
             return paidOrderItems;

@@ -81,4 +81,16 @@ CREATE TABLE orderitems (
     productid INTEGER not null REFERENCES product(productid),
     quantity INTEGER NOT NULL,
     price decimal NOT NULL
-)
+);
+
+CREATE TABLE StripePaymentInfo (
+    payment_intent_id VARCHAR(200) PRIMARY KEY,
+    stripeCustomerId VARCHAR(200) NOT NULL,
+    payment_method VARCHAR(200) NOT NULL,
+    amount NUMERIC(10, 2) NOT NULL,
+    currency VARCHAR(10) NOT NULL,
+    stripeStatus VARCHAR(30) NOT NULL,
+    createdTime TIMESTAMP NOT NULL,
+    completedTime TIMESTAMP,
+    orderId INT NOT NULL REFERENCES orders (orderid)
+);

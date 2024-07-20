@@ -1,3 +1,4 @@
+import Stripe from "stripe";
 import CheckoutRequest from "../request/CheckoutRequest";
 import { OrderRequest } from "../request/OrderRequest";
 import { OrderResponse } from "../request/OrderResponse";
@@ -9,5 +10,6 @@ export default interface PaymentService {
     createSession(username: string, checkoutRequest: CheckoutRequest): Promise<SessionResponse>;
     updateOrderToPaid(orderid: number): Promise<void>;
     fetchOrderDetails(username: string): Promise<any>;
-    fetchOrderDetailsByOrderId(orderId: number): Promise<OrderDetailsResponse[]>
+    fetchOrderDetailsByOrderId(orderId: number): Promise<OrderDetailsResponse[]>;
+    processStripeEvent(event: Stripe.Event): Promise<void>;
 }

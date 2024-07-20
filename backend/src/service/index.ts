@@ -1,4 +1,4 @@
-import { productRepo, userRepo, cartRepo, wishListRepo, orderRepo } from "../repo";
+import { productRepo, userRepo, cartRepo, wishListRepo, orderRepo, stripepaymentinfo } from "../repo";
 import ProductServiceImpl from "./impl/ProductServiceImpl";
 import { ProductService } from "./ProductService";
 import { searchRepo } from "../repo";
@@ -22,7 +22,7 @@ const productService: ProductService = new ProductServiceImpl(productRepo),
     cartService: CartService = new CartServiceImpl(cartRepo, userService),
     wishListService: WishListService = new WishListServiceImpl(wishListRepo, userService),
     stripeService: StripeService = new StripeServiceImpl(stripe),
-    paymentService: PaymentService = new PaymentServiceImpl(orderRepo, userService, stripeService);
+    paymentService: PaymentService = new PaymentServiceImpl(orderRepo, userService, stripeService, stripepaymentinfo, cartRepo);
 
 export {
     productService,

@@ -11,5 +11,6 @@ export default interface PaidOrderItem {
     order: {
         createdat: Date;
         status: string
-    };
+    }
+    orderitemid: number
 }

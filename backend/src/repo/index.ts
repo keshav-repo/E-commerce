@@ -12,13 +12,18 @@ import WishListRepoImpl from "./impl/WishListRepoImpl";
 import { WishListRepo } from "./WishListRepo";
 import { OrderRepo } from "./OrderRepo";
 import OrderRepoImpl from "./impl/OrderRepoImpl";
-
+import StripepaymentRepo from "./Stripepaymentinfo";
+import StripepaymentRepoImpl from "./impl/StripepaymentRepoImpl";
 
 const productRepo: ProductRepo = new ProductRepoImpl(),
     searchRepo: SearchRepo = new SearchRepoImpl(client),
     userRepo: UserRepository = new UserRepositoryImpl(),
     cartRepo: CartRepo = new CartRepoImpl(prisma),
     wishListRepo: WishListRepo = new WishListRepoImpl(prisma),
-    orderRepo: OrderRepo = new OrderRepoImpl(prisma);
+    orderRepo: OrderRepo = new OrderRepoImpl(prisma),
+    stripepaymentinfo: StripepaymentRepo = new StripepaymentRepoImpl(prisma);
 
-export { productRepo, searchRepo, userRepo, cartRepo, wishListRepo, orderRepo };
+export {
+    productRepo, searchRepo, userRepo, cartRepo,
+    wishListRepo, orderRepo, stripepaymentinfo
+};

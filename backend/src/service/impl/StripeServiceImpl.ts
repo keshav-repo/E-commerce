@@ -64,6 +64,16 @@ class StripeServiceImpl implements StripeService {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }
+
+    public constructEvent(body: any, signature: string): Stripe.Event {
+        try {
+            const STRIPE_WEBHOOK_SECRET: string = process.env.STRIPE_WEBHOOK_SECRET!;
+            return this.stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET);
+        } catch (err) {
+            throw err;
+        }
+    }
+
 }
 
 export default StripeServiceImpl;

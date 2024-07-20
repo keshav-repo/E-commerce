@@ -179,6 +179,39 @@ class CartRepoImpl implements CartRepo {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     };
+
+    public deleteMultipleCartItem = async (userId: number, productIdArr: number[]): Promise<void> => {
+        try {
+            await this.prisma.cartitems.deleteMany({
+                where: {
+                    productid: {
+                        in: productIdArr
+                    },
+                    carts: {
+                        userid: userId
+                    }
+                }
+            });
+        } catch (err) {
+            L.error(`error deleting multiple cart item, error: ${err}`)
+            throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+        }
+    }
+
+    public deleteCartItems = async (itemIdArr: number[]): Promise<void> => {
+        try {
+            await this.prisma.cartitems.deleteMany({
+                where: {
+                    cartitemid: {
+                        in: itemIdArr
+                    }
+                }
+            })
+        } catch (err) {
+            L.error(`error deleting cart item ${err}`);
+            throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+        }
+    }
 }
 
 export default CartRepoImpl;

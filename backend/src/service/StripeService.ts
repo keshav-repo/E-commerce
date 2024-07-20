@@ -5,5 +5,6 @@ export interface StripeService {
     getPricing(productid: string): Promise<Stripe.Price | null>;
     getCustomer(emailId: string): Promise<Stripe.Customer | null>;
     createCustomer(emailId: string): Promise<Stripe.Customer>;
-    createSession(sessionPayload: StripeSessionPayload): Promise<Stripe.Checkout.Session>
+    createSession(sessionPayload: StripeSessionPayload): Promise<Stripe.Checkout.Session>;
+    constructEvent(body: any, signature: string): Stripe.Event;
 }

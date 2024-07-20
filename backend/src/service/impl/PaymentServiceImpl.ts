@@ -17,19 +17,28 @@ import Stripe from "stripe";
 import { ResponseTypes } from "../../config/ResponseTypes";
 import { InternalServerError } from "../../error/InternalServerError";
 import SessionResponse from "../../response/SessionResponse";
-import { OrderStatus } from "../../config";
+import { OrderStatus, StripeEventsType } from "../../config";
 import { use } from "passport";
 import PaidOrderItem from "../../model/PaidOrderItem";
 import OrderDetailsResponse from "../../response/OrderDetailResponse";
+import StripePaymentInfo from "../../model/stripePaymentInfo";
+import StripepaymentRepo from "../../repo/Stripepaymentinfo";
+import { CartRepo } from "../../repo/CartRepo";
+import { info } from "node:console";
 
 class PaymentServiceImpl implements PaymentService {
     private orderRepo: OrderRepo;
     private userService: UserService;
     private stripeService: StripeService;
-    constructor(orderRepo: OrderRepo, userService: UserService, stripeService: StripeService) {
+    private stripeRepo: StripepaymentRepo;
+    private cartRepo: CartRepo;
+    constructor(orderRepo: OrderRepo, userService: UserService,
+        stripeService: StripeService, stripeRepo: StripepaymentRepo, cartRepo: CartRepo) {
         this.orderRepo = orderRepo;
         this.userService = userService;
         this.stripeService = stripeService;
+        this.stripeRepo = stripeRepo;
+        this.cartRepo = cartRepo;
     }
     async createOrder(username: string, orderRequest: OrderRequest): Promise<OrderResponse> {
         try {
@@ -93,7 +102,8 @@ class PaymentServiceImpl implements PaymentService {
                 customer: customer?.id!,
                 payment_intent_data: {
                     metadata: {
-                        orderId: checkoutRequest.orderId
+                        orderId: checkoutRequest.orderId,
+                        userid: user.userId
                     }
                 }
             };
@@ -144,7 +154,6 @@ class PaymentServiceImpl implements PaymentService {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }
-
     async fetchOrderDetailsByOrderId(orderId: number): Promise<OrderDetailsResponse[]> {
         try {
             const orderItems: PaidOrderItem[] = await this.orderRepo.fetchOrderItemByOrderid(orderId);
@@ -169,7 +178,53 @@ class PaymentServiceImpl implements PaymentService {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }
+    async processStripeEvent(event: Stripe.Event): Promise<void> {
+        switch (event.type) {
+            case StripeEventsType.SUCCEEDED:
+                const paymentIntent: Stripe.PaymentIntent = event.data.object;
+                await this.processSucceedEvent(paymentIntent);
+                break;
+            case StripeEventsType.FAILED:
+                const paymentIntent_failed = event.data.object;
+                L.info(`payment intetent failed`, paymentIntent_failed);
+                break;
+            default:
+                console.log(`Unhandled event type ${event.type}`);
+        }
+    }
 
+    private async processSucceedEvent(paymentIntent: Stripe.PaymentIntent): Promise<void> {
+        try {
+            const { orderId, userid } = paymentIntent.metadata;
+
+            const stripePaymentInfo: StripePaymentInfo = {
+                payment_intent_id: paymentIntent.id,
+                stripeCustomerId: paymentIntent.customer ? paymentIntent.customer.toString() : '',
+                payment_method: paymentIntent.payment_method?.toString()!,
+                amount: paymentIntent.amount,
+                currency: paymentIntent.currency,
+                stripStatus: paymentIntent.status.toString(),
+                createdTime: paymentIntent.created,
+                completedTime: paymentIntent.status === 'succeeded' ? Date.now() : undefined,
+                orderId: parseInt(orderId)
+            };
+            // save stripe payment info in db
+            await this.stripeRepo.create(stripePaymentInfo);
+
+            // update order status to paid
+            await this.updateOrderToPaid(parseInt(orderId));
+
+            // fetch cartitemid from orderitem to delete
+            const paidOrderInfo: PaidOrderItem[] = await this.orderRepo.fetchOrderItemByOrderid(parseInt(orderId));
+            const productIdArr: number[] = paidOrderInfo.map(info => info.productid);
+
+            // remove items from cart, in real world application we will do soft delete
+            await this.cartRepo.deleteMultipleCartItem(parseInt(userid), productIdArr);
+
+        } catch (err) {
+            L.error(`error processing payment success event: ${JSON.stringify(paymentIntent)}`);
+        }
+    }
 }
 
 export default PaymentServiceImpl;
