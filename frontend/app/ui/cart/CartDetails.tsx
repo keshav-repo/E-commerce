@@ -171,7 +171,7 @@ const CartDetails: React.FC = () => {
                 </div>
             )}
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden flex flex-col lg:flex-row">
-                <div className="w-full lg:w-[60%] p-4 sm:p-6">
+                <div className="w-full  p-4 sm:p-6">
                     <Address address={address.address} name={address.name} postalCode={address.postalCode} />
                     <div className="mt-4">
                         {cartItems.map(item => (

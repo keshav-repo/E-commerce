@@ -96,6 +96,7 @@ class OrderRepoImpl implements OrderRepo {
                     product: {
                         select: {
                             name: true,
+                            images: true
                         },
                     },
                     quantity: true,
@@ -103,7 +104,8 @@ class OrderRepoImpl implements OrderRepo {
                     productid: true,
                     order: {
                         select: {
-                            createdat: true
+                            createdat: true,
+                            status: true
                         }
                     }
                 },

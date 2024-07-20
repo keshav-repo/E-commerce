@@ -127,12 +127,16 @@ class PaymentServiceImpl implements PaymentService {
 
             const response: OrderDetailsResponse[] = [];
             for (let orderItem of orderItems) {
+                const imagesArray = orderItem.product.images as unknown as string[];
+                const firstImage = Array.isArray(imagesArray) ? imagesArray[0] : null;
                 response.push({
                     name: orderItem.product.name,
+                    image: firstImage!,
                     quantity: orderItem.quantity,
                     price: orderItem.price.toNumber(),
                     createdAt: orderItem.order.createdat,
-                    productid: orderItem.productid
+                    productid: orderItem.productid,
+                    status: orderItem.order.status
                 })
             }
             return response;

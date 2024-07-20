@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import OrderDetails from '../ui/order/OrderDetails';
 
 export const metadata: Metadata = {
     title: 'Success page',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 export default async function Page() {
     return (
         <main className="pt-16">
-            <h1>Payment Successful!</h1>;
+            <OrderDetails />
         </main>
     );
 }

@@ -118,8 +118,22 @@ export interface CartItemProps {
 }
 
 export interface CartPageProps {
-  address: AddressProps
+  address: AddressProps,
   cartItems: CartItem[];
+}
+
+export interface OrderDetailsResponse {
+  name: string,
+  image: string,
+  quantity: number,
+  price: number,
+  createdAt: Date,
+  productid: number,
+  status: string
+}
+
+export interface OrderDetailsResponseProps {
+  order: OrderDetailsResponse
 }
 
 
