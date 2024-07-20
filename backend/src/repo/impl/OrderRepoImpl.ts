@@ -2,6 +2,9 @@ import { Prisma, PrismaClient, orderitems, orders } from "@prisma/client";
 import { OrderRepo } from "../OrderRepo";
 import L from "../../helper/logger";
 import { Order, OrderItem } from "../../model/Order";
+import { use } from "passport";
+import { OrderStatus } from "../../config";
+import PaidOrderItem from "../../model/PaidOrderItem";
 
 class OrderRepoImpl implements OrderRepo {
     private prisma: PrismaClient;
@@ -67,7 +70,6 @@ class OrderRepoImpl implements OrderRepo {
             throw new Error("error fetching orderId");
         }
     }
-
     public fetchOrderItem = async (orderid: number): Promise<orderitems[]> => {
         try {
             const order: orderitems[] = await this.prisma.orderitems.findMany({
@@ -79,6 +81,37 @@ class OrderRepoImpl implements OrderRepo {
         } catch (err) {
             L.error(`error fetching order item: ${orderid}, error ${err}`);
             throw new Error("error fetching order item");
+        }
+    }
+    public fetchOrderByUser = async (userId: number): Promise<PaidOrderItem[]> => {
+        try {
+            const paidOrderItems: PaidOrderItem[] = await this.prisma.orderitems.findMany({
+                where: {
+                    order: {
+                        status: OrderStatus.Paid,
+                        userid: userId
+                    },
+                },
+                select: {
+                    product: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                    quantity: true,
+                    price: true,
+                    productid: true,
+                    order: {
+                        select: {
+                            createdat: true
+                        }
+                    }
+                },
+            });
+            return paidOrderItems;
+        } catch (err) {
+            L.error(`error fetching order information with userid: ${userId} and error ${err}`)
+            throw new Error("error fetching order by user");
         }
     }
 }

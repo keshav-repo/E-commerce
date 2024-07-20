@@ -6,5 +6,6 @@ import SessionResponse from "../response/SessionResponse";
 export default interface PaymentService {
     createOrder(username: string, orderRequest: OrderRequest): Promise<OrderResponse>;
     createSession(username: string, checkoutRequest: CheckoutRequest): Promise<SessionResponse>;
-    updateOrderToPaid(orderid: number): Promise<void>
+    updateOrderToPaid(orderid: number): Promise<void>;
+    fetchOrderDetails(username: string): Promise<any>
 }

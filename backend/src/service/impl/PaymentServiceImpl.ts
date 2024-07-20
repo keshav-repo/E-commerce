@@ -18,6 +18,9 @@ import { ResponseTypes } from "../../config/ResponseTypes";
 import { InternalServerError } from "../../error/InternalServerError";
 import SessionResponse from "../../response/SessionResponse";
 import { OrderStatus } from "../../config";
+import { use } from "passport";
+import PaidOrderItem from "../../model/PaidOrderItem";
+import OrderDetailsResponse from "../../response/OrderDetailResponse";
 
 class PaymentServiceImpl implements PaymentService {
     private orderRepo: OrderRepo;
@@ -114,6 +117,31 @@ class PaymentServiceImpl implements PaymentService {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }
+
+    async fetchOrderDetails(username: string): Promise<OrderDetailsResponse[]> {
+        try {
+            const user: User = await this.userService.findUser(username);
+            const userId: number = parseInt(user.userId!);
+
+            const orderItems: PaidOrderItem[] = await this.orderRepo.fetchOrderByUser(userId);
+
+            const response: OrderDetailsResponse[] = [];
+            for (let orderItem of orderItems) {
+                response.push({
+                    name: orderItem.product.name,
+                    quantity: orderItem.quantity,
+                    price: orderItem.price.toNumber(),
+                    createdAt: orderItem.order.createdat,
+                    productid: orderItem.productid
+                })
+            }
+            return response;
+        } catch (err) {
+            L.error(`error fetching order details for username ${username}`);
+            throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+        }
+    }
+
 }
 
 export default PaymentServiceImpl;

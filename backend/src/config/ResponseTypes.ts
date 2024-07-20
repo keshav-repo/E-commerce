@@ -31,6 +31,7 @@ export const ResponseTypes = {
     CART_ITEM_DELETED: { code: "SUC10", message: "Cart item deleted" },
     ORDER_CREATED: { code: "SUC11", message: "Order created" },
     SESSION_CREATED: { code: "SUC12", message: "Order created" },
+    ORDER_DETAIL_FETCHED: { code: "SUC13", message: "Order details fetched" },
 
 } as const;
 

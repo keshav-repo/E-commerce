@@ -8,6 +8,7 @@ import { OrderResponse } from "../request/OrderResponse";
 import { SuccessResponse } from "../response/SuccessResponse";
 import { ResponseTypes } from "../config/ResponseTypes";
 import CheckoutRequest from "../request/CheckoutRequest";
+import OrderDetailsResponse from "../response/OrderDetailResponse";
 
 class PaymentController {
     private paymentService: PaymentService;
@@ -34,6 +35,16 @@ class PaymentController {
             const currUser: string = (req as any).currUser.username;
             const sessionResponse = await this.paymentService.createSession(currUser, checkoutRequest);
             res.status(201).json(new SuccessResponse(ResponseTypes.SESSION_CREATED, sessionResponse));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    public fetchOrder = async (req: Request<{}, {}, CheckoutRequest>, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const currUser: string = (req as any).currUser.username;
+            const response: OrderDetailsResponse[] = await this.paymentService.fetchOrderDetails(currUser);
+            res.json(new SuccessResponse(ResponseTypes.ORDER_DETAIL_FETCHED, response));
         } catch (err) {
             next(err);
         }
