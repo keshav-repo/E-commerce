@@ -42,7 +42,7 @@ export default function Profile() {
                 </button>
                 <ul className="mt-4 text-gray-700">
                   <li className="py-1 hover:bg-gray-100">
-                    <Link href="#">Orders</Link>
+                    <Link href="/orders">Orders</Link>
                   </li>
                   <li className="py-1 hover:bg-gray-100">
                     <Link href="#">Wishlist</Link>
