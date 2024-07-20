@@ -40,10 +40,16 @@ class PaymentController {
         }
     }
 
-    public fetchOrder = async (req: Request<{}, {}, CheckoutRequest>, res: Response, next: NextFunction): Promise<void> => {
+    public fetchOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const currUser: string = (req as any).currUser.username;
-            const response: OrderDetailsResponse[] = await this.paymentService.fetchOrderDetails(currUser);
+            const oid = req.query.orderId as string;
+            if (oid) {
+                const orderId = parseInt(oid);
+                var response: OrderDetailsResponse[] = await this.paymentService.fetchOrderDetailsByOrderId(orderId);
+            } else {
+                var response: OrderDetailsResponse[] = await this.paymentService.fetchOrderDetails(currUser);
+            }
             res.json(new SuccessResponse(ResponseTypes.ORDER_DETAIL_FETCHED, response));
         } catch (err) {
             next(err);

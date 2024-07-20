@@ -84,8 +84,9 @@ class PaymentServiceImpl implements PaymentService {
             const user: User = await this.userService.findUser(username);
             const customer: Stripe.Customer | null = await this.stripeService.getCustomer(user.email!);
 
+            const successUrl = process.env.STRIPE_SUCCESS_URL! + `?orderId=${checkoutRequest.orderId}`;
             const checkoutPayload: StripeSessionPayload = {
-                success_url: process.env.STRIPE_SUCCESS_URL!,
+                success_url: successUrl,
                 cancel_url: process.env.STRIPE_CANCEL_URL!,
                 line_items: line_items,
                 mode: 'payment',
@@ -108,7 +109,6 @@ class PaymentServiceImpl implements PaymentService {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }
-
     async updateOrderToPaid(orderid: number): Promise<void> {
         try {
             await this.orderRepo.updateOrderStatus(orderid, OrderStatus.Paid);
@@ -117,7 +117,6 @@ class PaymentServiceImpl implements PaymentService {
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }
-
     async fetchOrderDetails(username: string): Promise<OrderDetailsResponse[]> {
         try {
             const user: User = await this.userService.findUser(username);
@@ -142,6 +141,31 @@ class PaymentServiceImpl implements PaymentService {
             return response;
         } catch (err) {
             L.error(`error fetching order details for username ${username}`);
+            throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
+        }
+    }
+
+    async fetchOrderDetailsByOrderId(orderId: number): Promise<OrderDetailsResponse[]> {
+        try {
+            const orderItems: PaidOrderItem[] = await this.orderRepo.fetchOrderItemByOrderid(orderId);
+
+            const response: OrderDetailsResponse[] = [];
+            for (let orderItem of orderItems) {
+                const imagesArray = orderItem.product.images as unknown as string[];
+                const firstImage = Array.isArray(imagesArray) ? imagesArray[0] : null;
+                response.push({
+                    name: orderItem.product.name,
+                    image: firstImage!,
+                    quantity: orderItem.quantity,
+                    price: orderItem.price.toNumber(),
+                    createdAt: orderItem.order.createdat,
+                    productid: orderItem.productid,
+                    status: orderItem.order.status
+                })
+            }
+            return response;
+        } catch (err) {
+            L.error(`error fetching order details for orderid ${orderId}`);
             throw new InternalServerError(ResponseTypes.INTERNAL_ERROR.message, ResponseTypes.INTERNAL_ERROR.code);
         }
     }

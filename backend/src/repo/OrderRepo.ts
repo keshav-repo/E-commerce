@@ -7,6 +7,7 @@ export interface OrderRepo {
     createOrderItem(item: OrderItem[]): Promise<orderitems[]>;
     updateOrderStatus(orderid: number, status: string): Promise<orders>;
     fetchOrderById(orderid: number): Promise<orders | null>;
+    fetchOrderItemByOrderid(orderid: number): Promise<PaidOrderItem[]>
     fetchOrderItem(orderid: number): Promise<orderitems[]>;
     fetchOrderByUser(userId: number): Promise<PaidOrderItem[]>
 }

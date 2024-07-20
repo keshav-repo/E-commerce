@@ -70,6 +70,39 @@ class OrderRepoImpl implements OrderRepo {
             throw new Error("error fetching orderId");
         }
     }
+    public fetchOrderItemByOrderid = async (orderid: number): Promise<PaidOrderItem[]> => {
+        try {
+            const paidOrderItems: PaidOrderItem[] = await this.prisma.orderitems.findMany({
+                where: {
+                    order: {
+                        status: OrderStatus.Paid,
+                        orderid: orderid
+                    },
+                },
+                select: {
+                    product: {
+                        select: {
+                            name: true,
+                            images: true
+                        },
+                    },
+                    quantity: true,
+                    price: true,
+                    productid: true,
+                    order: {
+                        select: {
+                            createdat: true,
+                            status: true
+                        }
+                    }
+                }
+            });
+            return paidOrderItems;
+        } catch (err) {
+            L.error(`error fetching orderId: ${orderid}, error ${err}`);
+            throw new Error("error fetching orderId");
+        }
+    }
     public fetchOrderItem = async (orderid: number): Promise<orderitems[]> => {
         try {
             const order: orderitems[] = await this.prisma.orderitems.findMany({

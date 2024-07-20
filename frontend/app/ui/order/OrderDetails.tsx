@@ -2,19 +2,22 @@
 
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { CartItem, OrderDetailsResponse } from '@/app/lib/definitions';
+import { OrderDetailsResponse } from '@/app/lib/definitions';
 import OrderItemEle from './OrderItemEle';
 
 const OrderDetails: React.FC = () => {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [message, setMessage] = useState<{ text: string, type: 'error' | 'info' }>({ text: '', type: 'info' });
-    const [loading, setLoading] = useState(false);
-
     const [orders, setOrders] = useState<OrderDetailsResponse[]>([]);
 
     const fetchOrders = async () => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const orderId = queryParams.get("orderId");
         try {
-            const response: Response = await fetch('/api/payment/order', {
+            let url = '/api/payment/order';
+            if (orderId) {
+                url = url + `?orderId=${orderId}`;
+            }
+            const response: Response = await fetch(url, {
                 credentials: 'include',
             });
             const data = await response.json();
