@@ -33,7 +33,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
 
       }
     } catch (err) {
-      console.log('Error in updating cart item quantity'); s
+      console.log('Error in updating cart item quantity');
     }
   }
 

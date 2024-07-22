@@ -1,4 +1,3 @@
-import { it } from "node:test";
 import { Order, OrderItem } from "../../model/Order";
 import { User } from "../../model/User";
 import { OrderRepo } from "../../repo/OrderRepo";
@@ -18,13 +17,11 @@ import { ResponseTypes } from "../../config/ResponseTypes";
 import { InternalServerError } from "../../error/InternalServerError";
 import SessionResponse from "../../response/SessionResponse";
 import { OrderStatus, StripeEventsType } from "../../config";
-import { use } from "passport";
 import PaidOrderItem from "../../model/PaidOrderItem";
 import OrderDetailsResponse from "../../response/OrderDetailResponse";
 import StripePaymentInfo from "../../model/stripePaymentInfo";
 import StripepaymentRepo from "../../repo/Stripepaymentinfo";
 import { CartRepo } from "../../repo/CartRepo";
-import { info } from "node:console";
 
 class PaymentServiceImpl implements PaymentService {
     private orderRepo: OrderRepo;

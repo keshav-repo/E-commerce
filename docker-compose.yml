@@ -100,6 +100,26 @@ services:
     networks:
       - elastic-net
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://postgres:mysecretpassword@postgres-db:5432/mydatabase
+      - ELASTICSEARCH_URL=http://elasticsearch:9800
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-db
+      - elasticsearch
+      - kafka1
+      - kafka2
+      - kafka3
+    networks:
+      - elastic-net
+
 networks:
   elastic-net:
     driver: bridge
