@@ -10,8 +10,8 @@ RUN npm install
 
 COPY dist ./dist
 
-RUN npm run introspect:dev
-RUN npm run generate:dev
+# RUN npm run introspect:dev
+# RUN npm run generate:dev
 
 EXPOSE 8080
 
