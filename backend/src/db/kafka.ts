@@ -1,9 +1,10 @@
 import { Kafka, Producer } from 'kafkajs';
 import L from '../helper/logger';
+import { BROKERS } from '../config';
 
 const kafka = new Kafka({
     clientId: 'my-app',
-    brokers: ['localhost:9092']
+    brokers: BROKERS
 });
 
 const producer: Producer = kafka.producer();

@@ -1,0 +1,15 @@
+services:
+  backend:
+    build:
+      context: .
+    environment:
+      NODE_ENV: dev
+    networks:
+      - elastic-net
+    ports:
+      - 8080:8080
+
+networks:
+  elastic-net:
+    driver: bridge
+

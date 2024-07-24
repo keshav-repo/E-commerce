@@ -25,4 +25,6 @@ export const TOKEN_AGE_IN_MS = process.env.TOKEN_AGE_IN_MS ? parseInt(process.en
 export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY || '7d';
 export const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY || '1h'
 
+export const BROKERS = process.env.BROKERS!.split(',');
+
 export { CONSTANTS, OrderStatus, StripeEventsType };
