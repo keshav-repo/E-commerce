@@ -44,6 +44,7 @@ export interface SearchFilter {
 }
 
 export interface SearcProducthData {
+  id: number,
   productId: number;
   images: string[];
   brand: string;

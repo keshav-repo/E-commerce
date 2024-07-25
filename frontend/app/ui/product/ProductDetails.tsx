@@ -72,7 +72,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
           <ProductDetailsSection specifications={product.additionalInfo.specifications} />
         </div>
       </div>
-      <SimilarProducts />
     </div>
   );
 }
