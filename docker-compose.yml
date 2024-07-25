@@ -7,10 +7,15 @@ services:
       POSTGRES_PASSWORD: mysecretpassword
     ports:
       - "5432:5432"
-    volumes:
-      - ./init/initPostres.sql
     networks:
       - elastic-net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./DB_INIT:/docker-entrypoint-initdb.d
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -103,22 +108,19 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
-    container_name: backend
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgres://postgres:mysecretpassword@postgres-db:5432/mydatabase
-      - ELASTICSEARCH_URL=http://elasticsearch:9800
-    ports:
-      - "8080:8080"
+      NODE_ENV: dev
     depends_on:
-      - postgres-db
-      - elasticsearch
-      - kafka1
-      - kafka2
-      - kafka3
+      postgres-db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_started
+      kafka1:
+        condition: service_started
     networks:
       - elastic-net
+    ports:
+      - 8080:8080
 
 networks:
   elastic-net:

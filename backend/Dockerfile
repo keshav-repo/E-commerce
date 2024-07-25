@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-ENTRYPOINT [ "sh", "-c", "npm run introspect:dev && npm run generate:dev && npm run build && npm start" ]
+ENTRYPOINT [ "sh", "-c", "npm run introspect:dev && npm run generate:dev && npm run build && npm run seedEs && npm start" ]
 
 EXPOSE 8080
 
