@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/consume.ts",
-    "build": "tsc",
+    "build": "npx tsc",
     "seedEs": "ts-node src/seedEs.ts",
-    "seedRds": "ts-node src/seedRds.ts"
+    "seedRds": "ts-node src/seedRds.ts",
+    "seed": "node dist/seedRds.js dist/seedEs.js"
   },
   "keywords": [],
   "author": "",
