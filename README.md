@@ -101,6 +101,12 @@ NODE_ENV=test
 
 1. Replace enpty value in NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY with your stripe payment published key
 
+#### Replace destination in `frontend/next.config.js` file with below
+
+```
+ destination: 'http://localhost:8080/api/:path*'
+```
+
 #### Install dependency in frontend
 
 ```shell
