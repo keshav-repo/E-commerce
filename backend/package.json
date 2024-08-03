@@ -10,7 +10,10 @@
     "introspect:dev": "dotenv -e .env.development -- npx prisma introspect",
     "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev   --create-only --name init",
     "generate:dev": "dotenv -e .env.development -- npx prisma generate",
-    "seedEs": "dotenv -e .env.development ts-node script/SeedES.ts"
+    "seedEs": "dotenv -e .env.development ts-node script/SeedES.ts",
+    "local:dev": "nodemon -r dotenv/config src/server.ts dotenv_config_path=.env",
+    "introspect:local": "dotenv -e .env -- npx prisma introspect",
+    "generate:local": "dotenv -e .env -- npx prisma generate"
   },
   "author": "",
   "license": "ISC",

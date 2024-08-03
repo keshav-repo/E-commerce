@@ -65,8 +65,6 @@ npm install
 #### Seed ES
 
 ```shell
-cd backend
-
 npm run seedEs
 ```
 
@@ -81,11 +79,10 @@ npm run generate:dev
 #### Run backend
 
 ```shell
-
 npm run dev
 ```
 
-#### If you have added stripe credentials, add following to trigger stripe webhook
+#### If you have added stripe account, add following to trigger stripe webhook
 
 ```shell
 # below command take you to stripe page for authentication.
@@ -94,17 +91,11 @@ stripe login
 stripe listen --forward-to localhost:8080/api/payment/webhook
 ```
 
-#### Run frontend
-
-```shell
-npm run start
-```
-
 #### Replace .env file with below content for frontend
 
 ```
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
-BACKEND_HOST=http://backend:8080
+BACKEND_HOST=http://localhost:8080
 NODE_ENV=test
 ```
 
