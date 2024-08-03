@@ -72,9 +72,6 @@ class SearchRepoImpl implements SearchRepo {
                 body: jsonData
             });
 
-            L.info('es result is');
-            L.info(JSON.stringify(result));
-
             const total = result.hits.total as any;
             if (total.value > 0) {
                 const items: ProductSearchDto[] = result.hits.hits.map(hit => hit._source as ProductSearchDto);
