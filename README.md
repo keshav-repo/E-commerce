@@ -18,9 +18,6 @@ docker compose -f essentialService.yml  up
 
 #### Replace .env.development file with below content
 
-1. Replace GOOGLE_AUTH_CLIENTID and GOOGLE_AUTH_SECRET with your google auth credentials.
-2. Replace STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY with your stripe payment credentials.
-
 ```
 DB_HOST=localhost
 DB_PORT=5432
@@ -55,6 +52,9 @@ STRIPE_SUCCESS_URL=http://localhost:3000/success
 STRIPE_CANCEL_URL=http://localhost:3000/cancel
 ```
 
+1. Replace GOOGLE_AUTH_CLIENTID and GOOGLE_AUTH_SECRET with your google auth credentials.
+2. Replace STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY with your stripe payment credentials.
+
 #### Install all dependency in backend
 
 ```shell
@@ -70,7 +70,7 @@ cd backend
 npm run seedEs
 ```
 
-#### Introspect and generate prisma using below command
+#### Introspect and generate prisma client using below command
 
 ```shell
 npm run introspect:dev
@@ -85,11 +85,30 @@ npm run generate:dev
 npm run dev
 ```
 
+#### If you have added stripe credentials, add following to trigger stripe webhook
+
+```shell
+# below command take you to stripe page for authentication.
+stripe login
+
+stripe listen --forward-to localhost:8080/api/payment/webhook
+```
+
 #### Run frontend
 
 ```shell
 npm run start
 ```
+
+#### Replace .env file with below content for frontend
+
+```
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+BACKEND_HOST=http://backend:8080
+NODE_ENV=test
+```
+
+1. Replace enpty value in NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY with your stripe payment published key
 
 #### Install dependency in frontend
 
