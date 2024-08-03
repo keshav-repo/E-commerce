@@ -1,6 +1,27 @@
 ## E-commerce
 
-### Start the apps using docker
+Welcome to my nodejs nextjs product which is built on following technology.
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Google Auth](https://img.shields.io/badge/Google_Auth-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)
+
+Below are main feature of this project.
+
+1. This is a monolithic project which can split into multiple microservices based on requirement. As each service layer is independent of each other, we can easily migrate to microservice architecture.
+2. Server side rendering is done using nextjs which will help in Search engine optimisation.
+3. By using elastic search, we can enhance search capability which is required in big project. Elastic search gives fuzzy search capability in real time.
+4. Kafka is used in places to communicate between two microservices which do not need to interact in real time. In current implementation, there is api to add a product. After product is added, a event is added. There is a seperate consumer which consumes the event and stores in elastic search.
+
+### Start the whole apps in a single docker command
 
 ```shell
 docker compose -p ecommerce  up -d
